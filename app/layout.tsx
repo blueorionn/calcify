@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-const TITLE = 'Next Calculator'
+const TITLE = 'Calcify - Simple Calculator'
 const DESCRIPTION =
   'A fast, clean, and responsive calculator for everyday arithmetic calculations.'
 
