@@ -76,10 +76,10 @@ export default function ArithmeticCalculator() {
 
         <div className='grid grid-cols-4 gap-1'>
           {/* Memory Function Row */}
-          <MemoryFunctionButton mtype='add' />
-          <MemoryFunctionButton mtype='sub' />
-          <MemoryFunctionButton mtype='recall' />
-          <MemoryFunctionButton mtype='clear' />
+          <MemoryFunctionButton mtype='add' dispatch={dispatch} />
+          <MemoryFunctionButton mtype='sub' dispatch={dispatch} />
+          <MemoryFunctionButton mtype='recall' dispatch={dispatch} />
+          <MemoryFunctionButton mtype='clear' dispatch={dispatch} />
 
           {/* Row 1: AC, C, %, ÷ */}
           <ClearButton btype='all_clear' dispatch={dispatch} />
