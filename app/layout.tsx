@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import PwaRegister from '@/components/PwaRegister'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
@@ -20,6 +21,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
+  manifest: '/manifest.json',
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
@@ -27,6 +29,9 @@ export const metadata: Metadata = {
   twitter: {
     title: TITLE,
     description: DESCRIPTION,
+  },
+  other: {
+    'theme-color': '#0a0a0a',
   },
 }
 
@@ -41,7 +46,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className='flex min-h-full flex-col'>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <PwaRegister />
+        </ThemeProvider>
       </body>
     </html>
   )
