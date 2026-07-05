@@ -10,7 +10,7 @@ export default function Header() {
   const { theme, setTheme } = useThemeProvider()
 
   return (
-    <header className='relative z-100 h-max w-full bg-gray-200 dark:bg-gray-800'>
+    <header className='bg-secondary dark:bg-card relative z-100 h-max w-full'>
       <nav className='mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 md:py-6 lg:px-0'>
         <div className='w-max'>
           <Link
@@ -24,7 +24,7 @@ export default function Header() {
               width={24}
               className='aspect-auto h-8 w-8'
             />
-            <h1 className='text-xl font-bold text-gray-800 lg:text-2xl dark:text-gray-200'>
+            <h1 className='text-foreground text-xl font-bold lg:text-2xl'>
               Calcify
             </h1>
           </Link>
