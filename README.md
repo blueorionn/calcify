@@ -4,26 +4,26 @@ A fast, clean, responsive calculator built with **Next.js 16**, **React 19**, **
 
 ## Calculators
 
-| Calculator | Status |
-| --- | --- |
-| **Basic** (arithmetic + memory) | ✅ Live |
-| **Scientific** (trig, log, sqrt, etc.) | 🔜 Coming |
-| **Graph** (plot equations) | 🔜 Coming |
-| **BMI** (body mass index) | 🔜 Coming |
+| Calculator                                    | Status    |
+| --------------------------------------------- | --------- |
+| **Basic** (arithmetic + memory)               | ✅ Live   |
+| **Scientific** (trig, log, sqrt, etc.)        | 🔜 Coming |
+| **Graph** (plot equations)                    | 🔜 Coming |
+| **BMI** (body mass index)                     | 🔜 Coming |
 | **Currency Conversion** (live exchange rates) | 🔜 Coming |
-| _More to be announced_ | — |
+| _More to be announced_                        | —         |
 
 ## Tech Stack
 
-| Layer | Technology |
-| --- | --- |
-| Framework | Next.js 16 (App Router) |
-| UI | React 19, shadcn/ui (radix-nova) |
-| Icons | lucide-react |
-| Math | mathjs (safe evaluation) |
-| Styling | Tailwind CSS v4 |
-| Fonts | Geist (UI), Share Tech Mono (display) |
-| Testing | Vitest |
+| Layer     | Technology                            |
+| --------- | ------------------------------------- |
+| Framework | Next.js 16 (App Router)               |
+| UI        | React 19, shadcn/ui (radix-nova)      |
+| Icons     | lucide-react                          |
+| Math      | mathjs (safe evaluation)              |
+| Styling   | Tailwind CSS v4                       |
+| Fonts     | Geist (UI), Share Tech Mono (display) |
+| Testing   | Vitest                                |
 
 ## Getting Started
 

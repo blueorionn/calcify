@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Grip } from 'lucide-react'
 import { useThemeProvider } from '@/context/ThemeContext'
 import { Button } from '@/components/ui/button'
 import Logo from '@/public/icons/icon.png'
@@ -29,7 +29,7 @@ export default function Header() {
             </h1>
           </Link>
         </div>
-        <div className='flex w-max items-center justify-center gap-1 lg:gap-2'>
+        <div className='flex w-max items-center justify-center gap-2'>
           <Button
             variant='ghost'
             size='icon'
@@ -38,11 +38,14 @@ export default function Header() {
             className='cursor-pointer'
           >
             {theme === 'dark' ? (
-              <Sun className='h-4 w-4' />
+              <Sun className='h-6 w-6' />
             ) : (
-              <Moon className='h-4 w-4' />
+              <Moon className='h-6 w-6' />
             )}
           </Button>
+          <Link href={`/apps`}>
+            <Grip className='h-5 w-5' />
+          </Link>
           <Button variant='ghost' size='icon' asChild>
             <a
               href='https://github.com/blueorionn/calcify'
@@ -50,7 +53,7 @@ export default function Header() {
               rel='noopener noreferrer nofollow'
               aria-label='GitHub Repository'
             >
-              <svg className='size-4' viewBox='0 0 100 100' fill='currentColor'>
+              <svg className='size-5' viewBox='0 0 100 100' fill='currentColor'>
                 <path
                   fillRule='evenodd'
                   clipRule='evenodd'

@@ -73,7 +73,10 @@ describe('CHOOSE_OPERATION', () => {
   })
 
   it('ignores operation when both operands are 0', () => {
-    const state = reducer(INITIAL_STATE, { type: ACTIONS.CHOOSE_OPERATION, payload: '+' })
+    const state = reducer(INITIAL_STATE, {
+      type: ACTIONS.CHOOSE_OPERATION,
+      payload: '+',
+    })
     expect(state).toEqual(INITIAL_STATE)
   })
 })
