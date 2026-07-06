@@ -116,9 +116,7 @@ export default function CurrencyConversion() {
 
   return (
     <>
-      {/* Main Card */}
       <div className='bg-card border-border w-full max-w-md rounded border p-8 shadow-lg'>
-        {/* From Currency Section */}
         <div className='mb-6'>
           <label className='text-foreground mb-3 block text-sm font-medium'>
             From
@@ -152,8 +150,6 @@ export default function CurrencyConversion() {
             </select>
           </div>
         </div>
-
-        {/* Swap Button */}
         <div className='mb-6 flex justify-center'>
           <button
             className='bg-accent hover:bg-accent/90 text-accent-foreground active:bg-accent/80 rounded-full p-3 shadow-md transition-colors duration-200'
@@ -175,8 +171,6 @@ export default function CurrencyConversion() {
             </svg>
           </button>
         </div>
-
-        {/* To Currency Section */}
         <div className='mb-8'>
           <label className='text-foreground mb-3 block text-sm font-medium'>
             To
@@ -229,8 +223,6 @@ export default function CurrencyConversion() {
             </p>
           )}
         </div>
-
-        {/* Reset Button */}
         <button
           className='bg-primary hover:bg-primary/80 text-primary-foreground active:bg-primary/60 w-full rounded py-4 text-xl font-medium transition-colors duration-200'
           onClick={handleReset}
@@ -238,8 +230,6 @@ export default function CurrencyConversion() {
           Clear
         </button>
       </div>
-
-      {/* Footer Note */}
       <p className='text-muted-foreground mt-6 text-center text-xs'>
         Exchange rates are approximate and may vary
       </p>
