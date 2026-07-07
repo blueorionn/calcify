@@ -9,8 +9,8 @@ A fast, clean, responsive calculator built with **Next.js 16**, **React 19**, **
 | **Basic** (arithmetic + memory)               | ✅ Live   |
 | **Scientific** (trig, log, sqrt, etc.)        | 🔜 Coming |
 | **Graph** (plot equations)                    | 🔜 Coming |
-| **BMI** (body mass index)                     | 🔜 Coming |
-| **Currency Conversion** (live exchange rates) | 🔜 Coming |
+| **BMI** (body mass index)                     | ✅ Live   |
+| **Currency Conversion** (live exchange rates) | ✅ Live   |
 | _More to be announced_                        | —         |
 
 ## Tech Stack
