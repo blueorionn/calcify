@@ -5,10 +5,10 @@ import { useState } from 'react'
 type Unit = 'metric' | 'imperial'
 
 function getCategory(bmi: number) {
-  if (bmi < 18.5) return 'Underweight'
-  if (bmi < 25) return 'Normal'
-  if (bmi < 30) return 'Overweight'
-  return 'Obese'
+  if (bmi < 18.5) return { indicator: 'Underweight', color: 'text-blue-500' }
+  if (bmi < 25) return { indicator: 'Normal', color: 'text-green-500' }
+  if (bmi < 30) return { indicator: 'Overweight', color: 'text-yellow-500' }
+  return { indicator: 'Obese', color: 'text-red-500' }
 }
 
 export default function BMICalculator() {
@@ -87,7 +87,9 @@ export default function BMICalculator() {
 
           <p className='text-5xl font-bold'>{result?.bmi ?? '0.00'}</p>
 
-          <p className='text-lg font-semibold'>{result?.category ?? '-'}</p>
+          <p className={`text-lg font-semibold ${result?.category.color}`}>
+            {result?.category.indicator ?? '-'}
+          </p>
         </div>
       </div>
 
