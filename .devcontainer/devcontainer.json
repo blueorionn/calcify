@@ -1,0 +1,22 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+  "name": "Calcify",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+  "forwardPorts": [3000],
+  "postCreateCommand": "pnpm install",
+  "postStartCommand": "pnpm run dev",
+
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode", // Prettier for formatting
+        "ms-vscode.vscode-typescript-next", // JavaScript and TypeScript Nightly
+        "dbaeumer.vscode-eslint", // ESLint
+        "bradlc.vscode-tailwindcss", // Tailwind Css IntelliSense
+        "biomejs.biome"
+      ]
+    }
+  }
+}
