@@ -93,13 +93,9 @@ export default function BMICalculator() {
         </div>
       </div>
 
-      <button className='bg-primary text-primary-foreground hover:bg-primary/80 w-full rounded py-3'>
-        Calculate
-      </button>
-
       <button
         onClick={reset}
-        className='bg-muted hover:bg-muted/80 my-2 w-full rounded py-3'
+        className='bg-primary text-primary-foreground hover:bg-primary/80 w-full rounded py-3'
       >
         Reset
       </button>
