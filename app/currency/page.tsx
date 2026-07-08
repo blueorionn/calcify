@@ -1,5 +1,5 @@
 import Header from '@/components/Header'
-import CurrencyConversion from '@/calc/CurrencyConversion'
+import CurrencyConversion from '@/calc/Currency/CurrencyConversion'
 
 export default function Page() {
   return (

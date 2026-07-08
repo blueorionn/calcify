@@ -1,5 +1,5 @@
 import Header from '@/components/Header'
-import BMICalculator from '@/calc/BMICalculator'
+import BMICalculator from '@/calc/BMI/Calculator'
 
 export default function Page() {
   return (

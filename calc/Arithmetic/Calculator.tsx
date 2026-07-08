@@ -1,6 +1,6 @@
 'use client'
 import { useReducer, useEffect } from 'react'
-import { reducer, INITIAL_STATE, ACTIONS } from '@/core/arithmetic'
+import { reducer, INITIAL_STATE, ACTIONS } from '@/calc/Arithmetic/arithmetic'
 import {
   DigitButton,
   OperationButton,
@@ -9,7 +9,7 @@ import {
   ClearButton,
   MemoryFunctionButton,
   DeleteButton,
-} from '@/components/calc/Button'
+} from '@/calc/Arithmetic/components/Button'
 
 export default function ArithmeticCalculator() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)

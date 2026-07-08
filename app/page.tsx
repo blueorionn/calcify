@@ -1,5 +1,5 @@
 import Header from '@/components/Header'
-import ArithmeticCalculator from '@/calc/ArithmeticCalculator'
+import ArithmeticCalculator from '@/calc/Arithmetic/Calculator'
 import { Share_Tech_Mono } from 'next/font/google'
 
 const shareTechMono = Share_Tech_Mono({
