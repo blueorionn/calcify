@@ -46,6 +46,11 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
       if (action.payload === '0' && state.currentOperand === '0') return state
       if (action.payload === '.' && state.currentOperand.includes('.'))
         return state
+      if (action.payload === '.' && state.currentOperand === '0')
+        return {
+          ...state,
+          currentOperand: `${state.currentOperand}${action.payload}`,
+        }
       if (action.payload)
         return {
           ...state,
