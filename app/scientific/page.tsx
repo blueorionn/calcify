@@ -1,10 +1,6 @@
 import Header from '@/components/Header'
 import ScientificCalculator from '@/calc/Scientific/Calculator'
-import { Share_Tech_Mono } from 'next/font/google'
-
-const shareTechMono = Share_Tech_Mono({
-  weight: '400',
-})
+import { shareTechMono } from '@/lib/fonts'
 
 export default function Page() {
   return (
