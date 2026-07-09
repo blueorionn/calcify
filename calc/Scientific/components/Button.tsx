@@ -42,7 +42,7 @@ export function ConstantButton({ constant }: { constant: 'pi' | 'e' }) {
   }
 
   return (
-    <button className='bg-accent text-accent-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
       {constantDisplay[constant]}
     </button>
   )
@@ -50,7 +50,7 @@ export function ConstantButton({ constant }: { constant: 'pi' | 'e' }) {
 
 export function TrigButton({ trig }: { trig: 'sin' | 'cos' | 'tan' }) {
   return (
-    <button className='bg-accent text-accent-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
       {trig}
     </button>
   )
