@@ -1,15 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { calBMIFunc, getCategory } from './bmi'
 
 type Unit = 'metric' | 'imperial'
-
-function getCategory(bmi: number) {
-  if (bmi < 18.5) return { indicator: 'Underweight', color: 'text-blue-500' }
-  if (bmi < 25) return { indicator: 'Normal', color: 'text-green-500' }
-  if (bmi < 30) return { indicator: 'Overweight', color: 'text-yellow-500' }
-  return { indicator: 'Obese', color: 'text-red-500' }
-}
 
 export default function BMICalculator() {
   const [height, setHeight] = useState('')
@@ -22,7 +16,7 @@ export default function BMICalculator() {
 
     if (h <= 0 || w <= 0) return null
 
-    const bmi = unit === 'metric' ? w / (h / 100) ** 2 : (703 * w) / h ** 2
+    const bmi = calBMIFunc({ unit, w, h })
 
     return {
       bmi: bmi.toFixed(2),
