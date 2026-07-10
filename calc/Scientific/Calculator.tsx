@@ -15,6 +15,7 @@ import {
   EvaluateButton,
 } from './components/Button'
 import { HistoryIcon } from 'lucide-react'
+import 'katex/dist/katex.min.css'
 
 export default function ScientificCalculator() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
@@ -53,7 +54,7 @@ export default function ScientificCalculator() {
           <ClearButton type='AC' dispatch={dispatch} />
           <ClearButton type='DEL' dispatch={dispatch} />
 
-          <ConstantButton constant='pi' />
+          <ConstantButton constant='pi' fn='\pi' />
           <ConstantButton constant='e' />
           <TrigButton trig='sin' />
           <TrigButton trig='cos' />
@@ -67,8 +68,8 @@ export default function ScientificCalculator() {
           <DigitButton digit={9} dispatch={dispatch} />
           <OperationButton operation='*' dispatch={dispatch} />
 
-          <FunctionButton func='e^x' />
-          <FunctionButton func='x^y' />
+          <FunctionButton func='e^x' fn='e^x' />
+          <FunctionButton func='x^y' fn='x^y' />
           <DigitButton digit={4} dispatch={dispatch} />
           <DigitButton digit={5} dispatch={dispatch} />
           <DigitButton digit={6} dispatch={dispatch} />

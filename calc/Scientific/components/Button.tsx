@@ -1,6 +1,7 @@
 'use client'
 import type { Dispatch } from 'react'
 import { ACTION_TYPE, ACTIONS } from '../scientific'
+import { InlineMath } from 'react-katex'
 
 export function DigitButton({
   digit,
@@ -64,7 +65,13 @@ export function OperationButton({
   )
 }
 
-export function ConstantButton({ constant }: { constant: 'pi' | 'e' }) {
+export function ConstantButton({
+  constant,
+  fn,
+}: {
+  constant: 'pi' | 'e'
+  fn?: string
+}) {
   const constantDisplay: Record<string, string> = {
     pi: '\u03C0',
     e: 'e',
@@ -72,7 +79,11 @@ export function ConstantButton({ constant }: { constant: 'pi' | 'e' }) {
 
   return (
     <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {constantDisplay[constant]}
+      {fn === undefined ? (
+        constantDisplay[constant]
+      ) : (
+        <InlineMath math={`${fn}`} />
+      )}
     </button>
   )
 }
@@ -136,10 +147,10 @@ export function LogButton({ type }: { type: 'log' | 'ln' }) {
   )
 }
 
-export function FunctionButton({ func }: { func: string }) {
+export function FunctionButton({ func, fn }: { func: string; fn?: string }) {
   return (
     <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {func}
+      {fn === undefined ? func : <InlineMath math={`${fn}`} />}
     </button>
   )
 }
