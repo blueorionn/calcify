@@ -2,6 +2,7 @@
 import { useReducer, useEffect } from 'react'
 import { reducer, INITIAL_STATE, ACTIONS } from '@/calc/Arithmetic/arithmetic'
 import {
+  operatorDisplay,
   DigitButton,
   OperationButton,
   PeriodButton,
@@ -63,7 +64,8 @@ export default function ArithmeticCalculator() {
               className='text-foreground my-0.5 text-xl font-light tracking-tight'
               aria-label='Previous Operand'
             >
-              {state.previousOperand} {state.operation}
+              {state.previousOperand}{' '}
+              {state.operation && operatorDisplay[state.operation]}
             </div>
             <div
               className='text-foreground hide-scrollbar my-0.5 overflow-x-scroll text-3xl font-light tracking-tight'

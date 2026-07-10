@@ -3,7 +3,7 @@ import type { Dispatch } from 'react'
 import { ACTIONS, type ACTION_TYPE } from '@/calc/Arithmetic/arithmetic'
 import { Delete } from 'lucide-react'
 
-const operatorDisplay: Record<string, string> = {
+export const operatorDisplay: Record<string, string> = {
   '+': '+',
   '-': '\u2212',
   '*': '\u00D7',
