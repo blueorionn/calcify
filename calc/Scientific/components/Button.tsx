@@ -1,14 +1,36 @@
-export function DigitButton({ digit }: { digit: number }) {
+'use client'
+import type { Dispatch } from 'react'
+import { ACTION_TYPE, ACTIONS } from '../scientific'
+
+export function DigitButton({
+  digit,
+  dispatch,
+}: {
+  digit: number
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() =>
+        dispatch({ type: ACTIONS.ADD_DIGIT, payload: String(digit) })
+      }
+    >
       {digit}
     </button>
   )
 }
 
-export function PeriodButton() {
+export function PeriodButton({
+  dispatch,
+}: {
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() => dispatch({ type: ACTIONS.ADD_DIGIT, payload: '.' })}
+    >
       .
     </button>
   )
@@ -16,8 +38,10 @@ export function PeriodButton() {
 
 export function OperationButton({
   operation,
+  dispatch,
 }: {
   operation: '+' | '-' | '*' | '/' | '%' | '+-'
+  dispatch: Dispatch<ACTION_TYPE>
 }) {
   const operatorDisplay: Record<string, string> = {
     '+': '+',
@@ -29,7 +53,12 @@ export function OperationButton({
   }
 
   return (
-    <button className='bg-accent text-accent-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-accent text-accent-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() =>
+        dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: String(operation) })
+      }
+    >
       {operatorDisplay[operation]}
     </button>
   )
@@ -115,17 +144,37 @@ export function FunctionButton({ func }: { func: string }) {
   )
 }
 
-export function EvaluateButton() {
+export function EvaluateButton({
+  dispatch,
+}: {
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <button className='bg-primary hover:bg-primary/80 text-primary-foreground active:bg-primary/60 col-span-2 py-4 text-xl font-medium transition-colors duration-200'>
+    <button
+      className='bg-primary hover:bg-primary/80 text-primary-foreground active:bg-primary/60 col-span-2 py-4 text-xl font-medium transition-colors duration-200'
+      onClick={() => dispatch({ type: ACTIONS.EVALUATE })}
+    >
       =
     </button>
   )
 }
 
-export function ClearButton({ type }: { type: 'AC' | 'DEL' }) {
+export function ClearButton({
+  type,
+  dispatch,
+}: {
+  type: 'AC' | 'DEL'
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() =>
+        type === 'AC'
+          ? dispatch({ type: ACTIONS.CLEAR })
+          : dispatch({ type: ACTIONS.DELETE })
+      }
+    >
       {type}
     </button>
   )
