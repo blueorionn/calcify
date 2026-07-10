@@ -1,6 +1,6 @@
 'use client'
-import { useReducer } from 'react'
-import { INITIAL_STATE, reducer } from './scientific'
+import { useReducer, useEffect } from 'react'
+import { INITIAL_STATE, ACTIONS, reducer } from './scientific'
 import {
   AngleButton,
   DigitButton,
@@ -19,6 +19,43 @@ import 'katex/dist/katex.min.css'
 
 export default function ScientificCalculator() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key >= '0' && e.key <= '9') {
+        dispatch({ type: ACTIONS.ADD_DIGIT, payload: e.key })
+        return
+      }
+
+      switch (e.key) {
+        case '.':
+          dispatch({ type: ACTIONS.ADD_DIGIT, payload: '.' })
+          break
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+        case '%':
+          dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: e.key })
+          break
+        case 'Enter':
+        case '=':
+          e.preventDefault()
+          dispatch({ type: ACTIONS.EVALUATE })
+          break
+        case 'Backspace':
+          dispatch({ type: ACTIONS.DELETE })
+          break
+        case 'Escape':
+        case 'Delete':
+          dispatch({ type: ACTIONS.CLEAR })
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [dispatch])
 
   return (
     <>
