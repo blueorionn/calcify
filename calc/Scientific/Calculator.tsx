@@ -14,7 +14,6 @@ import {
   ClearButton,
   EvaluateButton,
 } from './components/Button'
-import { HistoryIcon } from 'lucide-react'
 import 'katex/dist/katex.min.css'
 
 export default function ScientificCalculator() {
@@ -65,9 +64,6 @@ export default function ScientificCalculator() {
       >
         {/* LCD Display */}
         <div className='mb-2 w-full overflow-hidden'>
-          <div className='p-2.5 py-4'>
-            <HistoryIcon size={24} className='ml-auto' />
-          </div>
           <div className='p-4 py-2.5 text-right'>
             <div
               className='text-foreground py-1 text-xl font-light tracking-tight'
