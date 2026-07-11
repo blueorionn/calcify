@@ -11,6 +11,7 @@ import {
   LogButton,
   FunctionButton,
   ParenthesesButton,
+  MemoryButton,
   ClearButton,
   EvaluateButton,
 } from './components/Button'
@@ -82,16 +83,23 @@ export default function ScientificCalculator() {
 
         <div className='grid grid-cols-6 gap-1'>
           <AngleButton active='deg' />
+          <MemoryButton type='mc' />
+          <MemoryButton type='mr' />
+          <MemoryButton type='sub' />
+          <MemoryButton type='add' />
+
+          <ConstantButton constant='pi' fn='\pi' />
+          <ConstantButton constant='e' />
           <ParenthesesButton type='(' />
           <ParenthesesButton type=')' />
           <ClearButton type='AC' dispatch={dispatch} />
           <ClearButton type='DEL' dispatch={dispatch} />
 
-          <ConstantButton constant='pi' fn='\pi' />
-          <ConstantButton constant='e' />
+          <FunctionButton func='Inv' />
           <TrigButton trig='sin' />
           <TrigButton trig='cos' />
           <TrigButton trig='tan' />
+          <OperationButton operation='%' dispatch={dispatch} />
           <OperationButton operation='/' dispatch={dispatch} />
 
           <LogButton type='log' />
@@ -101,22 +109,22 @@ export default function ScientificCalculator() {
           <DigitButton digit={9} dispatch={dispatch} />
           <OperationButton operation='*' dispatch={dispatch} />
 
-          <FunctionButton func='e^x' fn='e^x' />
-          <FunctionButton func='x^y' fn='x^y' />
+          <FunctionButton func='x**(1/2)' fn='\sqrt{x}' />
+          <FunctionButton func='x**(1/3)' fn='\sqrt[3]{x}' />
           <DigitButton digit={4} dispatch={dispatch} />
           <DigitButton digit={5} dispatch={dispatch} />
           <DigitButton digit={6} dispatch={dispatch} />
           <OperationButton operation='-' dispatch={dispatch} />
 
+          <FunctionButton func='x**y' fn='x^{y}' />
           <FunctionButton func='x!' />
-          <FunctionButton func='|x|' />
           <DigitButton digit={1} dispatch={dispatch} />
           <DigitButton digit={2} dispatch={dispatch} />
           <DigitButton digit={3} dispatch={dispatch} />
           <OperationButton operation='+' dispatch={dispatch} />
 
           <OperationButton operation='+-' dispatch={dispatch} />
-          <OperationButton operation='%' dispatch={dispatch} />
+          <FunctionButton func='|x|' />
           <PeriodButton dispatch={dispatch} />
           <DigitButton digit={0} dispatch={dispatch} />
           <EvaluateButton dispatch={dispatch} />

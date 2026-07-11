@@ -170,6 +170,16 @@ export function EvaluateButton({
   )
 }
 
+export function MemoryButton({ type }: { type: 'mr' | 'mc' | 'add' | 'sub' }) {
+  return (
+    <>
+      <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+        {type}
+      </button>
+    </>
+  )
+}
+
 export function ClearButton({
   type,
   dispatch,
