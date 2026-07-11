@@ -9,7 +9,7 @@ export default function Page() {
         <section
           className={`flex h-full w-full flex-col items-center justify-center p-4`}
         >
-          <div className='my-8 mt-6 w-xs md:w-md'>
+          <div className='xs:w-sm my-8 mt-6 w-xs sm:w-md'>
             <div className='relative h-3 overflow-hidden rounded-full'>
               <div className='flex h-full'>
                 <div className='w-[18.5%] bg-blue-500'></div>
