@@ -1,5 +1,10 @@
+import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import BMICalculator from '@/calc/BMI/Calculator'
+
+export const metadata: Metadata = {
+  title: 'BMI Calculator | Calcify',
+}
 
 export default function Page() {
   return (

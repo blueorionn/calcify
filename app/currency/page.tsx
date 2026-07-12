@@ -1,5 +1,10 @@
+import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import CurrencyConversion from '@/calc/Currency/CurrencyConversion'
+
+export const metadata: Metadata = {
+  title: 'Currency Conversion | Calcify',
+}
 
 export default function Page() {
   return (

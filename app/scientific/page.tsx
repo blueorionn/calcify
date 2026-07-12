@@ -1,6 +1,11 @@
+import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import ScientificCalculator from '@/calc/Scientific/Calculator'
 import { shareTechMono } from '@/lib/fonts'
+
+export const metadata: Metadata = {
+  title: 'Scientific Calculator | Calcify',
+}
 
 export default function Page() {
   return (
