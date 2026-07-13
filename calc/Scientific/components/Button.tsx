@@ -2,6 +2,7 @@
 import type { Dispatch } from 'react'
 import { ACTION_TYPE, ACTIONS } from '../scientific'
 import { InlineMath } from 'react-katex'
+import { Delete } from 'lucide-react'
 
 // Digits (0-9)
 export function DigitButton({
@@ -284,14 +285,14 @@ export function ClearButton({
 }) {
   return (
     <button
-      className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      className='bg-secondary text-foreground flex items-center justify-center py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
       onClick={() =>
         ctype === 'AC'
           ? dispatch({ type: ACTIONS.CLEAR })
           : dispatch({ type: ACTIONS.DELETE })
       }
     >
-      {ctype}
+      {ctype === 'AC' ? 'AC' : <Delete className='h-6 w-6' />}
     </button>
   )
 }
