@@ -6,9 +6,11 @@ import {
   DigitButton,
   PeriodButton,
   OperationButton,
+  InverseButton,
   TrigButton,
   ConstantButton,
   LogButton,
+  ExponentialButton,
   FunctionButton,
   ParenthesesButton,
   MemoryButton,
@@ -92,31 +94,55 @@ export default function ScientificCalculator() {
           <ConstantButton constant='e' />
           <ParenthesesButton type='(' />
           <ParenthesesButton type=')' />
-          <ClearButton type='AC' dispatch={dispatch} />
-          <ClearButton type='DEL' dispatch={dispatch} />
+          <ClearButton ctype='AC' dispatch={dispatch} />
+          <ClearButton ctype='DEL' dispatch={dispatch} />
 
-          <FunctionButton func='Inv' />
-          <TrigButton trig='sin' />
-          <TrigButton trig='cos' />
-          <TrigButton trig='tan' />
+          <InverseButton value={state.inverse} dispatch={dispatch} />
+          <TrigButton inverse={state.inverse} trig='sin' />
+          <TrigButton inverse={state.inverse} trig='cos' />
+          <TrigButton inverse={state.inverse} trig='tan' />
           <OperationButton operation='%' dispatch={dispatch} />
           <OperationButton operation='/' dispatch={dispatch} />
 
-          <LogButton type='log' />
-          <LogButton type='ln' />
+          <LogButton inverse={state.inverse} ltype='log' />
+          <LogButton inverse={state.inverse} ltype='ln' />
           <DigitButton digit={7} dispatch={dispatch} />
           <DigitButton digit={8} dispatch={dispatch} />
           <DigitButton digit={9} dispatch={dispatch} />
           <OperationButton operation='*' dispatch={dispatch} />
 
-          <FunctionButton func='x**(1/2)' fn='\sqrt{x}' />
-          <FunctionButton func='x**(1/3)' fn='\sqrt[3]{x}' />
+          <ExponentialButton
+            inverse={state.inverse}
+            etype={{
+              name: 'square',
+              normal: '\\mathsf{x^2}',
+              inverse: '\\mathsf{\\sqrt{x}}',
+            }}
+            dispatch={dispatch}
+          />
+          <ExponentialButton
+            inverse={state.inverse}
+            etype={{
+              name: 'cube',
+              normal: '\\mathsf{x^3}',
+              inverse: '\\mathsf{\\sqrt[3]{x}}',
+            }}
+            dispatch={dispatch}
+          />
           <DigitButton digit={4} dispatch={dispatch} />
           <DigitButton digit={5} dispatch={dispatch} />
           <DigitButton digit={6} dispatch={dispatch} />
           <OperationButton operation='-' dispatch={dispatch} />
 
-          <FunctionButton func='x**y' fn='x^{y}' />
+          <ExponentialButton
+            inverse={state.inverse}
+            etype={{
+              name: 'XY',
+              normal: '\\mathsf{x^{y}}',
+              inverse: '\\mathsf{\\sqrt[y]{x}}',
+            }}
+            dispatch={dispatch}
+          />
           <FunctionButton func='x!' />
           <DigitButton digit={1} dispatch={dispatch} />
           <DigitButton digit={2} dispatch={dispatch} />

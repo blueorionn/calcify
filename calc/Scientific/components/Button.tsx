@@ -3,6 +3,7 @@ import type { Dispatch } from 'react'
 import { ACTION_TYPE, ACTIONS } from '../scientific'
 import { InlineMath } from 'react-katex'
 
+// Digits (0-9)
 export function DigitButton({
   digit,
   dispatch,
@@ -37,6 +38,7 @@ export function PeriodButton({
   )
 }
 
+// Basic Operations (add, sub, mul, div, modulus)
 export function OperationButton({
   operation,
   dispatch,
@@ -65,6 +67,7 @@ export function OperationButton({
   )
 }
 
+// Constants (e.g. pi, euler's constant)
 export function ConstantButton({
   constant,
   fn,
@@ -88,14 +91,29 @@ export function ConstantButton({
   )
 }
 
-export function TrigButton({ trig }: { trig: 'sin' | 'cos' | 'tan' }) {
+// Trig functions (sin, cos, tan) and their inverse
+export function TrigButton({
+  inverse,
+  trig,
+}: {
+  inverse: boolean
+  trig: 'sin' | 'cos' | 'tan'
+}) {
   return (
     <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {trig}
+      {inverse ? (
+        <>
+          {trig}
+          <sup>-1</sup>
+        </>
+      ) : (
+        trig
+      )}
     </button>
   )
 }
 
+// Angle Button (degree, radians)
 export function AngleButton({ active }: { active: 'deg' | 'rad' }) {
   return (
     <div className='bg-secondary col-span-2 flex items-center py-4 text-xl font-medium'>
@@ -139,14 +157,74 @@ export function ParenthesesButton({ type }: { type: '(' | ')' }) {
   )
 }
 
-export function LogButton({ type }: { type: 'log' | 'ln' }) {
+// Logs (base10, natural) and their inverse (10^x, e^x)
+export function LogButton({
+  inverse,
+  ltype,
+}: {
+  inverse: boolean
+  ltype: 'log' | 'ln'
+}) {
   return (
     <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {type}
+      {inverse ? (
+        ltype === 'log' ? (
+          <InlineMath math='\mathsf{10^{x}}' />
+        ) : (
+          <InlineMath math='\mathsf{e^{x}}' />
+        )
+      ) : (
+        ltype
+      )}
     </button>
   )
 }
 
+export function InverseButton({
+  value,
+  dispatch,
+}: {
+  value: boolean
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
+  return (
+    <>
+      <button
+        className={`bg-secondary py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75 ${value ? 'text-foreground' : 'text-foreground/50'}`}
+        onClick={() => dispatch({ type: ACTIONS.INVERSE })}
+      >
+        2nd
+      </button>
+    </>
+  )
+}
+
+// exponential buttons (e.g. xʸ, x¹∕ʸ)
+export function ExponentialButton({
+  inverse,
+  etype,
+  dispatch,
+}: {
+  inverse: boolean
+  etype: {
+    name: 'square' | 'cube' | 'XY'
+    normal: string
+    inverse: string
+  }
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
+  return (
+    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+      {inverse ? (
+        <InlineMath math={`${etype.inverse}`} />
+      ) : (
+        <InlineMath math={`${etype.normal}`} />
+      )}
+    </button>
+  )
+}
+
+// Operation takes place on CurrentOperand
 export function FunctionButton({ func, fn }: { func: string; fn?: string }) {
   return (
     <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
@@ -155,6 +233,7 @@ export function FunctionButton({ func, fn }: { func: string; fn?: string }) {
   )
 }
 
+// Evaluate (=)
 export function EvaluateButton({
   dispatch,
 }: {
@@ -199,23 +278,24 @@ export function MemoryButton({
   )
 }
 
+// Clear and Delete Button
 export function ClearButton({
-  type,
+  ctype,
   dispatch,
 }: {
-  type: 'AC' | 'DEL'
+  ctype: 'AC' | 'DEL'
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   return (
     <button
       className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
       onClick={() =>
-        type === 'AC'
+        ctype === 'AC'
           ? dispatch({ type: ACTIONS.CLEAR })
           : dispatch({ type: ACTIONS.DELETE })
       }
     >
-      {type}
+      {ctype}
     </button>
   )
 }

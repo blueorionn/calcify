@@ -6,6 +6,7 @@ export const ACTIONS = {
   CLEAR: 'clear',
   DELETE: 'delete',
   EVALUATE: 'evaluate',
+  INVERSE: 'inverse',
   MEMORY_ADD: 'MAdd',
   MEMORY_SUB: 'MSub',
   MEMORY_RECALL: 'MRecall',
@@ -17,6 +18,7 @@ interface STATE_TYPE {
   currentOperand: string
   operation: string | null
   memory: string
+  inverse: boolean
   overwrite: boolean
 }
 
@@ -25,6 +27,7 @@ export const INITIAL_STATE: STATE_TYPE = {
   currentOperand: '0',
   operation: null,
   memory: '0',
+  inverse: false,
   overwrite: false,
 }
 
@@ -109,6 +112,8 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
         console.error('Evaluate Error')
         return state
       }
+    case ACTIONS.INVERSE:
+      return { ...state, inverse: !state.inverse }
     case ACTIONS.MEMORY_ADD:
       if (state.currentOperand === '0') return state
       return {
