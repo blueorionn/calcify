@@ -101,9 +101,18 @@ export function TrigButton({
 }
 
 // Angle Button (degree, radians)
-export function AngleButton({ active }: { active: 'deg' | 'rad' }) {
+export function AngleButton({
+  active,
+  dispatch,
+}: {
+  active: 'deg' | 'rad'
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <div className='bg-secondary col-span-2 flex items-center py-4 text-xl font-medium'>
+    <button
+      className='bg-secondary col-span-2 flex items-center py-4 text-xl font-medium'
+      onClick={() => dispatch({ type: ACTIONS.CHANGE_ANGLE })}
+    >
       <div className='flex flex-1 flex-col items-center gap-1'>
         <span
           className={`transition-colors duration-150 ${
@@ -132,7 +141,7 @@ export function AngleButton({ active }: { active: 'deg' | 'rad' }) {
           }`}
         />
       </div>
-    </div>
+    </button>
   )
 }
 

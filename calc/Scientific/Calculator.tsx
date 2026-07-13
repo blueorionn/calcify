@@ -84,7 +84,7 @@ export default function ScientificCalculator() {
         </div>
 
         <div className='grid grid-cols-6 gap-1'>
-          <AngleButton active='deg' />
+          <AngleButton active={state.angle} dispatch={dispatch} />
           <MemoryButton mtype='recall' dispatch={dispatch} />
           <MemoryButton mtype='clear' dispatch={dispatch} />
           <MemoryButton mtype='sub' dispatch={dispatch} />

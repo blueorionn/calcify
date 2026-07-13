@@ -1,6 +1,7 @@
 import { evaluate, round } from 'mathjs'
 
 export const ACTIONS = {
+  CHANGE_ANGLE: 'ChangeAngle',
   ADD_DIGIT: 'addDigit',
   CHOOSE_OPERATION: 'chooseOperation',
   CLEAR: 'clear',
@@ -14,6 +15,7 @@ export const ACTIONS = {
 }
 
 interface STATE_TYPE {
+  angle: 'deg' | 'rad'
   previousOperand: string
   currentOperand: string
   operation: string | null
@@ -23,6 +25,7 @@ interface STATE_TYPE {
 }
 
 export const INITIAL_STATE: STATE_TYPE = {
+  angle: 'deg',
   previousOperand: '0',
   currentOperand: '0',
   operation: null,
@@ -38,6 +41,8 @@ export type ACTION_TYPE = {
 
 export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
   switch (action.type) {
+    case ACTIONS.CHANGE_ANGLE:
+      return { ...state, angle: state.angle === 'deg' ? 'rad' : 'deg' }
     case ACTIONS.ADD_DIGIT:
       if (state.overwrite)
         return {
