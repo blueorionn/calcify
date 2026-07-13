@@ -149,7 +149,7 @@ export default function ScientificCalculator() {
           <DigitButton digit={3} dispatch={dispatch} />
           <OperationButton operation='+' dispatch={dispatch} />
 
-          <OperationButton operation='+-' dispatch={dispatch} />
+          <FunctionButton func='+-' />
           <FunctionButton func='|x|' />
           <PeriodButton dispatch={dispatch} />
           <DigitButton digit={0} dispatch={dispatch} />

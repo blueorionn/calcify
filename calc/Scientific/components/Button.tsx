@@ -43,7 +43,7 @@ export function OperationButton({
   operation,
   dispatch,
 }: {
-  operation: '+' | '-' | '*' | '/' | '%' | '+-'
+  operation: '+' | '-' | '*' | '/' | '%'
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   const operatorDisplay: Record<string, string> = {
@@ -212,10 +212,10 @@ export function ExponentialButton({
 }
 
 // Operation takes place on CurrentOperand
-export function FunctionButton({ func, fn }: { func: string; fn?: string }) {
+export function FunctionButton({ func }: { func: string }) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {fn === undefined ? func : <InlineMath math={`${fn}`} />}
+    <button className='bg-accent text-accent-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+      {func}
     </button>
   )
 }
