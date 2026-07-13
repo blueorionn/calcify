@@ -6,12 +6,17 @@ export const ACTIONS = {
   CLEAR: 'clear',
   DELETE: 'delete',
   EVALUATE: 'evaluate',
+  MEMORY_ADD: 'MAdd',
+  MEMORY_SUB: 'MSub',
+  MEMORY_RECALL: 'MRecall',
+  MEMORY_CLEAR: 'MClear',
 }
 
 interface STATE_TYPE {
   previousOperand: string
   currentOperand: string
   operation: string | null
+  memory: string
   overwrite: boolean
 }
 
@@ -19,6 +24,7 @@ export const INITIAL_STATE: STATE_TYPE = {
   previousOperand: '0',
   currentOperand: '0',
   operation: null,
+  memory: '0',
   overwrite: false,
 }
 
@@ -103,6 +109,40 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
         console.error('Evaluate Error')
         return state
       }
+    case ACTIONS.MEMORY_ADD:
+      if (state.currentOperand === '0') return state
+      return {
+        ...state,
+        memory: String(
+          round(
+            evaluate(
+              state.memory === '0'
+                ? state.currentOperand
+                : `${state.memory} + ${state.currentOperand}`
+            ),
+            10
+          )
+        ),
+      }
+    case ACTIONS.MEMORY_SUB:
+      if (state.currentOperand === '0') return state
+      return {
+        ...state,
+        memory: String(
+          round(
+            evaluate(
+              state.memory === '0'
+                ? state.currentOperand
+                : `${state.memory} - ${state.currentOperand}`
+            ),
+            10
+          )
+        ),
+      }
+    case ACTIONS.MEMORY_RECALL:
+      return { ...state, currentOperand: `${state.memory}`, overwrite: true }
+    case ACTIONS.MEMORY_CLEAR:
+      return { ...state, memory: '0' }
     default:
       return state
   }

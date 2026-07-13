@@ -83,10 +83,10 @@ export default function ScientificCalculator() {
 
         <div className='grid grid-cols-6 gap-1'>
           <AngleButton active='deg' />
-          <MemoryButton type='mc' />
-          <MemoryButton type='mr' />
-          <MemoryButton type='sub' />
-          <MemoryButton type='add' />
+          <MemoryButton mtype='recall' dispatch={dispatch} />
+          <MemoryButton mtype='clear' dispatch={dispatch} />
+          <MemoryButton mtype='sub' dispatch={dispatch} />
+          <MemoryButton mtype='add' dispatch={dispatch} />
 
           <ConstantButton constant='pi' fn='\pi' />
           <ConstantButton constant='e' />
