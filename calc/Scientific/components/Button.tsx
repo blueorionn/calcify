@@ -88,7 +88,7 @@ export function TrigButton({
   trig: 'sin' | 'cos' | 'tan'
 }) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
       {inverse ? (
         <>
           {trig}
@@ -163,7 +163,7 @@ export function LogButton({
   ltype: 'log' | 'ln'
 }) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
       {inverse ? (
         ltype === 'log' ? (
           <InlineMath math='\mathsf{10^{x}}' />
@@ -211,7 +211,7 @@ export function ExponentialButton({
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
       {inverse ? (
         <InlineMath math={`${etype.inverse}`} />
       ) : (
