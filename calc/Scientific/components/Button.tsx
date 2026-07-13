@@ -68,25 +68,12 @@ export function OperationButton({
 }
 
 // Constants (e.g. pi, euler's constant)
-export function ConstantButton({
-  constant,
-  fn,
-}: {
-  constant: 'pi' | 'e'
-  fn?: string
-}) {
-  const constantDisplay: Record<string, string> = {
-    pi: '\u03C0',
-    e: 'e',
-  }
-
+export function ConstantButton({ constant }: { constant: 'pi' | 'e' }) {
   return (
     <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {fn === undefined ? (
-        constantDisplay[constant]
-      ) : (
-        <InlineMath math={`${fn}`} />
-      )}
+      <InlineMath
+        math={`${constant === 'pi' ? '\\mathrm{\\pi}' : '\\mathrm{e}'}`}
+      />
     </button>
   )
 }

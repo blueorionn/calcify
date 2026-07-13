@@ -90,7 +90,7 @@ export default function ScientificCalculator() {
           <MemoryButton mtype='sub' dispatch={dispatch} />
           <MemoryButton mtype='add' dispatch={dispatch} />
 
-          <ConstantButton constant='pi' fn='\pi' />
+          <ConstantButton constant='pi' />
           <ConstantButton constant='e' />
           <ParenthesesButton type='(' />
           <ParenthesesButton type=')' />
