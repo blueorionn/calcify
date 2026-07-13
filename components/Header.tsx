@@ -30,6 +30,9 @@ export default function Header() {
           </Link>
         </div>
         <div className='flex w-max items-center justify-center gap-2'>
+          <Link href={`/apps`}>
+            <Grip className='h-5 w-5' />
+          </Link>
           <Button
             variant='ghost'
             size='icon'
@@ -43,9 +46,6 @@ export default function Header() {
               <Moon className='h-6 w-6' />
             )}
           </Button>
-          <Link href={`/apps`}>
-            <Grip className='h-5 w-5' />
-          </Link>
           <Button variant='ghost' size='icon' asChild>
             <a
               href='https://github.com/blueorionn/calcify'
