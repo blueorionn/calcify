@@ -29,7 +29,7 @@ export default function Header() {
             </h1>
           </Link>
         </div>
-        <div className='flex w-max items-center justify-center gap-2'>
+        <div className='flex w-max items-center justify-center gap-2.5'>
           <Link href={`/apps`}>
             <Grip className='h-5 w-5' />
           </Link>
