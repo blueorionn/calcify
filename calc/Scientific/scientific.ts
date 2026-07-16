@@ -2,9 +2,9 @@ import { evaluate, round } from 'mathjs'
 
 interface STATE_TYPE {
   angle: 'deg' | 'rad'
-  previousOperand: string
-  currentOperand: string
-  operation: string | null
+  expression: string
+  display: string
+  previousAnswer: string
   memory: string
   inverse: boolean
   overwrite: boolean
@@ -12,9 +12,9 @@ interface STATE_TYPE {
 
 export const INITIAL_STATE: STATE_TYPE = {
   angle: 'deg',
-  previousOperand: '0',
-  currentOperand: '0',
-  operation: null,
+  expression: '0',
+  display: '0',
+  previousAnswer: '0',
   memory: '0',
   inverse: false,
   overwrite: false,
@@ -32,6 +32,7 @@ export const ACTIONS = {
   FACTORIAL: 'factorial',
   PLUSMINUS: 'plusminus',
   ABSOLUTE: 'absolute',
+  ANSWER: 'answer',
 }
 
 export type ACTION_TYPE = {
@@ -41,51 +42,37 @@ export type ACTION_TYPE = {
 
 type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
 
+function toDisplay(expr: string): string {
+  const result = expr
+    .replace(/\^/g, '^{')
+    .replace(/\*/g, '\\times ')
+    .replace(/\//g, '\\div ')
+    .replace(/pi/g, '\\pi')
+    .replace(/abs\(([^)]*)\)/g, '\\lvert$1\\rvert')
+  return result
+}
+
 const handlers: Record<string, Handler> = {
   [ACTIONS.ADD_DIGIT](state, action) {
-    if (state.overwrite)
-      return { ...state, currentOperand: `${action.payload}`, overwrite: false }
-    if (action.payload === '0' && state.currentOperand === '0') return state
-    if (action.payload === '.' && state.currentOperand.includes('.'))
-      return state
-    if (action.payload === '.' && state.currentOperand === '0')
+    if (state.overwrite) {
+      const expr = action.payload ?? '0'
       return {
         ...state,
-        currentOperand: `${state.currentOperand}${action.payload}`,
+        expression: expr,
+        display: toDisplay(expr),
+        overwrite: false,
       }
-    if (action.payload)
-      return {
-        ...state,
-        currentOperand: `${state.currentOperand === '0' ? '' : state.currentOperand}${action.payload}`,
-      }
-    return state
+    }
+    const expr =
+      state.expression === '0' && action.payload !== '.'
+        ? (action.payload ?? '0')
+        : state.expression + (action.payload ?? '')
+    return { ...state, expression: expr, display: toDisplay(expr) }
   },
 
   [ACTIONS.CHOOSE_OPERATION](state, action) {
-    if (state.currentOperand === '0' && state.previousOperand === '0')
-      return state
-    if (state.currentOperand === '0')
-      return { ...state, operation: action.payload || null }
-    if (state.previousOperand === '0')
-      return {
-        ...state,
-        previousOperand: state.currentOperand,
-        currentOperand: '0',
-        operation: action.payload || null,
-      }
-    return {
-      ...state,
-      previousOperand: String(
-        round(
-          evaluate(
-            `${state.previousOperand} ${state.operation} ${state.currentOperand}`
-          ),
-          10
-        )
-      ),
-      operation: action.payload || null,
-      currentOperand: '0',
-    }
+    const expr = `${state.expression} ${action.payload} `
+    return { ...state, expression: expr, display: toDisplay(expr) }
   },
 
   [ACTIONS.CHANGE_ANGLE](state) {
@@ -97,21 +84,20 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.DELETE](state) {
-    if (state.currentOperand === '0' || state.currentOperand.length === 1)
-      return { ...state, currentOperand: '0' }
-    return { ...state, currentOperand: state.currentOperand.slice(0, -1) }
+    const expr =
+      state.expression.length <= 1 ? '0' : state.expression.slice(0, -1)
+    return { ...state, expression: expr, display: toDisplay(expr) }
   },
 
   [ACTIONS.EVALUATE](state) {
     try {
-      const result = evaluate(
-        `${state.previousOperand} ${state.operation} ${state.currentOperand}`
-      )
+      const result = evaluate(state.expression)
+      const str = String(round(result, 10))
       return {
         ...state,
-        currentOperand: String(round(result, 10)),
-        previousOperand: '0',
-        operation: null,
+        expression: str,
+        display: toDisplay(str),
+        previousAnswer: str,
         overwrite: true,
       }
     } catch {
@@ -127,66 +113,63 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.MEMORY_OPERATION](state, action) {
     if (action.payload === 'MC') return { ...state, memory: '0' }
     if (action.payload === 'MR')
-      return { ...state, currentOperand: `${state.memory}`, overwrite: true }
+      return {
+        ...state,
+        expression: state.memory,
+        display: toDisplay(state.memory),
+        overwrite: true,
+      }
+
+    const current = parseFloat(state.expression)
+    if (!current || current === 0) return state
+
     if (action.payload === 'M+') {
-      if (state.currentOperand === '0') return state
-      return {
-        ...state,
-        memory: String(
-          round(
-            evaluate(
-              state.memory === '0'
-                ? state.currentOperand
-                : `${state.memory} + ${state.currentOperand}`
-            ),
-            10
-          )
-        ),
-      }
+      const newMem =
+        state.memory === '0'
+          ? String(current)
+          : String(round(evaluate(`${state.memory} + ${current}`), 10))
+      return { ...state, memory: newMem }
     }
+
     if (action.payload === 'M-') {
-      if (state.currentOperand === '0') return state
-      return {
-        ...state,
-        memory: String(
-          round(
-            evaluate(
-              state.memory === '0'
-                ? state.currentOperand
-                : `${state.memory} - ${state.currentOperand}`
-            ),
-            10
-          )
-        ),
-      }
+      const newMem =
+        state.memory === '0'
+          ? String(current)
+          : String(round(evaluate(`${state.memory} - ${current}`), 10))
+      return { ...state, memory: newMem }
     }
-    return { ...state }
+
+    return state
   },
 
   [ACTIONS.FACTORIAL](state) {
-    if (state.currentOperand === '0') return state
-    return {
-      ...state,
-      currentOperand: String(round(evaluate(`${state.currentOperand}!`), 10)),
-    }
+    const expr = `${state.expression}!`
+    return { ...state, expression: expr, display: toDisplay(expr) }
   },
 
   [ACTIONS.PLUSMINUS](state) {
-    if (state.currentOperand === '0') return state
-    return {
-      ...state,
-      currentOperand: String(
-        round(evaluate(`${state.currentOperand} * -1`), 10)
-      ),
-    }
+    if (state.expression === '0') return state
+
+    const expr = state.expression.startsWith('-')
+      ? state.expression.slice(1)
+      : `-(${state.expression})`
+    return { ...state, expression: expr, display: toDisplay(expr) }
   },
 
   [ACTIONS.ABSOLUTE](state) {
-    try {
-      const value = Math.abs(parseFloat(state.currentOperand))
-      return { ...state, currentOperand: String(round(value, 10)) }
-    } catch {
-      return state
+    const expr = `abs(${state.expression})`
+    return { ...state, expression: expr, display: toDisplay(expr) }
+  },
+
+  [ACTIONS.ANSWER](state) {
+    const expr = state.overwrite
+      ? state.previousAnswer
+      : state.expression + state.previousAnswer
+    return {
+      ...state,
+      expression: expr,
+      display: toDisplay(expr),
+      overwrite: false,
     }
   },
 }

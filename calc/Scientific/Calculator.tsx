@@ -18,6 +18,7 @@ import {
   EvaluateButton,
 } from './components/Button'
 import 'katex/dist/katex.min.css'
+import { InlineMath } from 'react-katex'
 
 export default function ScientificCalculator() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
@@ -63,22 +64,22 @@ export default function ScientificCalculator() {
     <>
       <div
         className='bg-card border-border grid w-full max-w-lg grid-flow-row border shadow-lg'
-        style={{ aspectRatio: '9/14' }}
+        style={{ aspectRatio: '9/12' }}
       >
         {/* LCD Display */}
         <div className='mb-2 w-full overflow-hidden'>
-          <div className='p-4 py-2.5 text-right'>
+          <div className='p-4 text-right'>
             <div
               className='text-foreground py-1 text-xl font-light tracking-tight'
               aria-label='Previous Operand'
             >
-              {state.previousOperand} {state.operation}
+              {state.previousAnswer}
             </div>
             <div
               className='text-foreground hide-scrollbar overflow-x-scroll py-0.5 text-3xl font-light tracking-tight'
               aria-label='Current Operand'
             >
-              {state.currentOperand}
+              {<InlineMath math={`\\mathtt${state.display}`} />}
             </div>
           </div>
         </div>
