@@ -153,11 +153,11 @@ export default function ScientificCalculator() {
           <OperationButton operation='+' dispatch={dispatch} />
 
           <FunctionButton
-            ftype={{ fname: 'opp', ffunc: '\\mathsf{\\pm}' }}
+            ftype={{ fname: 'plusminus', ffunc: '\\mathsf{\\pm}' }}
             dispatch={dispatch}
           />
           <FunctionButton
-            ftype={{ fname: 'mod', ffunc: '\\mathsf{|x|}' }}
+            ftype={{ fname: 'absolute', ffunc: '\\mathsf{|x|}' }}
             dispatch={dispatch}
           />
           <PeriodButton dispatch={dispatch} />

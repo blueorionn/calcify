@@ -30,6 +30,8 @@ export const ACTIONS = {
   INVERSE: 'inverse',
   MEMORY_OPERATION: 'memoryOperation',
   FACTORIAL: 'factorial',
+  PLUSMINUS: 'plusminus',
+  ABSOLUTE: 'absolute',
 }
 
 export type ACTION_TYPE = {
@@ -166,6 +168,25 @@ const handlers: Record<string, Handler> = {
     return {
       ...state,
       currentOperand: String(round(evaluate(`${state.currentOperand}!`), 10)),
+    }
+  },
+
+  [ACTIONS.PLUSMINUS](state) {
+    if (state.currentOperand === '0') return state
+    return {
+      ...state,
+      currentOperand: String(
+        round(evaluate(`${state.currentOperand} * -1`), 10)
+      ),
+    }
+  },
+
+  [ACTIONS.ABSOLUTE](state) {
+    try {
+      const value = Math.abs(parseFloat(state.currentOperand))
+      return { ...state, currentOperand: String(round(value, 10)) }
+    } catch {
+      return state
     }
   },
 }

@@ -226,14 +226,21 @@ export function FunctionButton({
   ftype,
   dispatch,
 }: {
-  ftype: { fname: string; ffunc: string }
+  ftype: { fname: 'fact' | 'plusminus' | 'absolute'; ffunc: string }
   dispatch: Dispatch<ACTION_TYPE>
 }) {
+  const functionActions: Record<string, ACTION_TYPE> = {
+    fact: { type: ACTIONS.FACTORIAL },
+    opp: { type: ACTIONS.PLUSMINUS },
+    absolute: { type: ACTIONS.ABSOLUTE },
+  }
+
   return (
     <button
       className='bg-accent text-accent-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
       onClick={() => {
-        if (ftype.fname === 'fact') dispatch({ type: ACTIONS.FACTORIAL })
+        const action = functionActions[ftype.fname]
+        if (action) dispatch(action)
       }}
     >
       {<InlineMath math={`${ftype.ffunc}`} />}
