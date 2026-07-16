@@ -29,6 +29,7 @@ export const ACTIONS = {
   EVALUATE: 'evaluate',
   INVERSE: 'inverse',
   MEMORY_OPERATION: 'memoryOperation',
+  FACTORIAL: 'factorial',
 }
 
 export type ACTION_TYPE = {
@@ -158,6 +159,14 @@ const handlers: Record<string, Handler> = {
       }
     }
     return { ...state }
+  },
+
+  [ACTIONS.FACTORIAL](state) {
+    if (state.currentOperand === '0') return state
+    return {
+      ...state,
+      currentOperand: String(round(evaluate(`${state.currentOperand}!`), 10)),
+    }
   },
 }
 

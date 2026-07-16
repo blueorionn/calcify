@@ -222,10 +222,21 @@ export function ExponentialButton({
 }
 
 // Operation takes place on CurrentOperand
-export function FunctionButton({ ftype }: { ftype: string }) {
+export function FunctionButton({
+  ftype,
+  dispatch,
+}: {
+  ftype: { fname: string; ffunc: string }
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <button className='bg-accent text-accent-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {<InlineMath math={`${ftype}`} />}
+    <button
+      className='bg-accent text-accent-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() => {
+        if (ftype.fname === 'fact') dispatch({ type: ACTIONS.FACTORIAL })
+      }}
+    >
+      {<InlineMath math={`${ftype.ffunc}`} />}
     </button>
   )
 }

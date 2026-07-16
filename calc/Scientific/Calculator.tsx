@@ -143,14 +143,23 @@ export default function ScientificCalculator() {
             }}
             dispatch={dispatch}
           />
-          <FunctionButton ftype='\mathsf{x!}' />
+          <FunctionButton
+            ftype={{ fname: 'fact', ffunc: '\\mathsf{x!}' }}
+            dispatch={dispatch}
+          />
           <DigitButton digit={1} dispatch={dispatch} />
           <DigitButton digit={2} dispatch={dispatch} />
           <DigitButton digit={3} dispatch={dispatch} />
           <OperationButton operation='+' dispatch={dispatch} />
 
-          <FunctionButton ftype='\mathsf{\pm}' />
-          <FunctionButton ftype='\mathsf{|x|}' />
+          <FunctionButton
+            ftype={{ fname: 'opp', ffunc: '\\mathsf{\\pm}' }}
+            dispatch={dispatch}
+          />
+          <FunctionButton
+            ftype={{ fname: 'mod', ffunc: '\\mathsf{|x|}' }}
+            dispatch={dispatch}
+          />
           <PeriodButton dispatch={dispatch} />
           <DigitButton digit={0} dispatch={dispatch} />
           <EvaluateButton dispatch={dispatch} />
