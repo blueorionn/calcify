@@ -28,10 +28,7 @@ export const ACTIONS = {
   DELETE: 'delete',
   EVALUATE: 'evaluate',
   INVERSE: 'inverse',
-  MEMORY_ADD: 'MAdd',
-  MEMORY_SUB: 'MSub',
-  MEMORY_RECALL: 'MRecall',
-  MEMORY_CLEAR: 'MClear',
+  MEMORY_OPERATION: 'memoryOperation',
 }
 
 export type ACTION_TYPE = {
@@ -124,46 +121,43 @@ const handlers: Record<string, Handler> = {
     return { ...state, inverse: !state.inverse }
   },
 
-  [ACTIONS.MEMORY_ADD](state) {
-    if (state.currentOperand === '0') return state
-    return {
-      ...state,
-      memory: String(
-        round(
-          evaluate(
-            state.memory === '0'
-              ? state.currentOperand
-              : `${state.memory} + ${state.currentOperand}`
-          ),
-          10
-        )
-      ),
+  [ACTIONS.MEMORY_OPERATION](state, action) {
+    if (action.payload === 'MC') return { ...state, memory: '0' }
+    if (action.payload === 'MR')
+      return { ...state, currentOperand: `${state.memory}`, overwrite: true }
+    if (action.payload === 'M+') {
+      if (state.currentOperand === '0') return state
+      return {
+        ...state,
+        memory: String(
+          round(
+            evaluate(
+              state.memory === '0'
+                ? state.currentOperand
+                : `${state.memory} + ${state.currentOperand}`
+            ),
+            10
+          )
+        ),
+      }
     }
-  },
-
-  [ACTIONS.MEMORY_SUB](state) {
-    if (state.currentOperand === '0') return state
-    return {
-      ...state,
-      memory: String(
-        round(
-          evaluate(
-            state.memory === '0'
-              ? state.currentOperand
-              : `${state.memory} - ${state.currentOperand}`
-          ),
-          10
-        )
-      ),
+    if (action.payload === 'M-') {
+      if (state.currentOperand === '0') return state
+      return {
+        ...state,
+        memory: String(
+          round(
+            evaluate(
+              state.memory === '0'
+                ? state.currentOperand
+                : `${state.memory} - ${state.currentOperand}`
+            ),
+            10
+          )
+        ),
+      }
     }
-  },
-
-  [ACTIONS.MEMORY_RECALL](state) {
-    return { ...state, currentOperand: `${state.memory}`, overwrite: true }
-  },
-
-  [ACTIONS.MEMORY_CLEAR](state) {
-    return { ...state, memory: '0' }
+    return { ...state }
   },
 }
 

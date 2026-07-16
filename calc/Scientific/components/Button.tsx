@@ -264,10 +264,14 @@ export function MemoryButton({
     <button
       className='bg-muted text-muted-foreground hover:bg-muted/80 py-2 text-sm font-medium transition-colors duration-200 active:brightness-75'
       onClick={() => {
-        if (mtype === 'add') dispatch({ type: ACTIONS.MEMORY_ADD })
-        if (mtype === 'sub') dispatch({ type: ACTIONS.MEMORY_SUB })
-        if (mtype === 'recall') dispatch({ type: ACTIONS.MEMORY_RECALL })
-        if (mtype === 'clear') dispatch({ type: ACTIONS.MEMORY_CLEAR })
+        if (mtype === 'add')
+          dispatch({ type: ACTIONS.MEMORY_OPERATION, payload: 'M+' })
+        if (mtype === 'sub')
+          dispatch({ type: ACTIONS.MEMORY_OPERATION, payload: 'M-' })
+        if (mtype === 'recall')
+          dispatch({ type: ACTIONS.MEMORY_OPERATION, payload: 'MR' })
+        if (mtype === 'clear')
+          dispatch({ type: ACTIONS.MEMORY_OPERATION, payload: 'MC' })
       }}
     >
       {TEXT_DISPLAY[mtype]}
