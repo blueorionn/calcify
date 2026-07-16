@@ -1,18 +1,5 @@
 import { evaluate, round } from 'mathjs'
 
-export const ACTIONS = {
-  ADD_DIGIT: 'addDigit',
-  CHOOSE_OPERATION: 'chooseOperation',
-  CLEAR: 'clear',
-  ALL_CLEAR: 'reset',
-  DELETE: 'delete',
-  EVALUATE: 'evaluate',
-  MEMORY_ADD: 'MAdd',
-  MEMORY_SUB: 'MSub',
-  MEMORY_RECALL: 'MRecall',
-  MEMORY_CLEAR: 'MClear',
-}
-
 interface STATE_TYPE {
   previousOperand: string
   currentOperand: string
@@ -32,6 +19,16 @@ export const INITIAL_STATE: STATE_TYPE = {
 export type ACTION_TYPE = {
   type: string
   payload?: string
+}
+
+export const ACTIONS = {
+  ADD_DIGIT: 'addDigit',
+  CHOOSE_OPERATION: 'chooseOperation',
+  CLEAR: 'clear',
+  ALL_CLEAR: 'reset',
+  DELETE: 'delete',
+  EVALUATE: 'evaluate',
+  MEMORY_OPERATION: 'memoryOperation',
 }
 
 export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
@@ -96,6 +93,44 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
         ...state,
         currentOperand: `${state.currentOperand.slice(0, -1)}`,
       }
+    case ACTIONS.MEMORY_OPERATION:
+      if (action.payload === 'MC') return { ...state, memory: '0' }
+      if (action.payload === 'MR')
+        return { ...state, currentOperand: `${state.memory}`, overwrite: true }
+      if (action.payload === 'M+') {
+        if (state.currentOperand === '0') return state
+        return {
+          ...state,
+          memory: String(
+            round(
+              evaluate(
+                state.memory === '0'
+                  ? state.currentOperand
+                  : `${state.memory} + ${state.currentOperand}`
+              ),
+              10
+            )
+          ),
+        }
+      }
+      if (action.payload === 'M-') {
+        if (state.currentOperand === '0') return state
+        return {
+          ...state,
+          memory: String(
+            round(
+              evaluate(
+                state.memory === '0'
+                  ? state.currentOperand
+                  : `${state.memory} - ${state.currentOperand}`
+              ),
+              10
+            )
+          ),
+        }
+      }
+      return { ...state }
+
     case ACTIONS.EVALUATE:
       if (!state.operation) return state
       try {
@@ -113,40 +148,6 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
         console.error('Evaluate Error')
         return state
       }
-    case ACTIONS.MEMORY_ADD:
-      if (state.currentOperand === '0') return state
-      return {
-        ...state,
-        memory: String(
-          round(
-            evaluate(
-              state.memory === '0'
-                ? state.currentOperand
-                : `${state.memory} + ${state.currentOperand}`
-            ),
-            10
-          )
-        ),
-      }
-    case ACTIONS.MEMORY_SUB:
-      if (state.currentOperand === '0') return state
-      return {
-        ...state,
-        memory: String(
-          round(
-            evaluate(
-              state.memory === '0'
-                ? state.currentOperand
-                : `${state.memory} - ${state.currentOperand}`
-            ),
-            10
-          )
-        ),
-      }
-    case ACTIONS.MEMORY_RECALL:
-      return { ...state, currentOperand: `${state.memory}`, overwrite: true }
-    case ACTIONS.MEMORY_CLEAR:
-      return { ...state, memory: '0' }
     default:
       return state
   }

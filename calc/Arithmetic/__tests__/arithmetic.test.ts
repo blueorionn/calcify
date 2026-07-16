@@ -168,13 +168,15 @@ describe('CLEAR / ALL_CLEAR / DELETE', () => {
 })
 
 describe('Memory functions', () => {
+  const M = (op: string) => ({ type: ACTIONS.MEMORY_OPERATION, payload: op })
+
   describe('MEMORY_ADD (M+)', () => {
     it('stores currentOperand into memory when memory is 0', () => {
       const s1 = reducer(INITIAL_STATE, {
         type: ACTIONS.ADD_DIGIT,
         payload: '5',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
+      const s2 = reducer(s1, M('M+'))
       expect(s2.memory).toBe('5')
     })
 
@@ -183,14 +185,14 @@ describe('Memory functions', () => {
         type: ACTIONS.ADD_DIGIT,
         payload: '5',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
+      const s2 = reducer(s1, M('M+'))
       const s3 = { ...s2, currentOperand: '3' }
-      const s4 = reducer(s3, { type: ACTIONS.MEMORY_ADD })
+      const s4 = reducer(s3, M('M+'))
       expect(s4.memory).toBe('8')
     })
 
     it('does nothing when currentOperand is 0', () => {
-      const state = reducer(INITIAL_STATE, { type: ACTIONS.MEMORY_ADD })
+      const state = reducer(INITIAL_STATE, M('M+'))
       expect(state.memory).toBe('0')
     })
 
@@ -199,11 +201,11 @@ describe('Memory functions', () => {
         type: ACTIONS.ADD_DIGIT,
         payload: '1',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
+      const s2 = reducer(s1, M('M+'))
       const s3 = { ...s2, currentOperand: '2' }
-      const s4 = reducer(s3, { type: ACTIONS.MEMORY_ADD })
+      const s4 = reducer(s3, M('M+'))
       const s5 = { ...s4, currentOperand: '3' }
-      const s6 = reducer(s5, { type: ACTIONS.MEMORY_ADD })
+      const s6 = reducer(s5, M('M+'))
       expect(s6.memory).toBe('6')
     })
 
@@ -216,7 +218,7 @@ describe('Memory functions', () => {
       const s3 = reducer(s2, { type: ACTIONS.ADD_DIGIT, payload: '3' })
       const s4 = reducer(s3, { type: ACTIONS.EVALUATE })
       expect(s4.currentOperand).toBe('5')
-      const s5 = reducer(s4, { type: ACTIONS.MEMORY_ADD })
+      const s5 = reducer(s4, M('M+'))
       expect(s5.memory).toBe('5')
     })
   })
@@ -228,7 +230,7 @@ describe('Memory functions', () => {
         payload: '1',
       })
       const s2 = reducer(s1, { type: ACTIONS.ADD_DIGIT, payload: '0' })
-      const s3 = reducer(s2, { type: ACTIONS.MEMORY_SUB })
+      const s3 = reducer(s2, M('M-'))
       expect(s3.memory).toBe('10')
     })
 
@@ -238,10 +240,10 @@ describe('Memory functions', () => {
         payload: '1',
       })
       const s2 = reducer(s1, { type: ACTIONS.ADD_DIGIT, payload: '0' })
-      const s3 = reducer(s2, { type: ACTIONS.MEMORY_ADD })
+      const s3 = reducer(s2, M('M+'))
       expect(s3.memory).toBe('10')
       const s4 = { ...s3, currentOperand: '3' }
-      const s5 = reducer(s4, { type: ACTIONS.MEMORY_SUB })
+      const s5 = reducer(s4, M('M-'))
       expect(s5.memory).toBe('7')
     })
 
@@ -250,9 +252,10 @@ describe('Memory functions', () => {
         type: ACTIONS.ADD_DIGIT,
         payload: '5',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
-      const s3 = reducer(s2, { type: ACTIONS.MEMORY_SUB })
-      expect(s3.memory).toBe('0')
+      const s2 = reducer(s1, M('M+'))
+      const s3 = { ...s2, currentOperand: '0' }
+      const s4 = reducer(s3, M('M-'))
+      expect(s4.memory).toBe('5')
     })
   })
 
@@ -262,8 +265,8 @@ describe('Memory functions', () => {
         type: ACTIONS.ADD_DIGIT,
         payload: '4',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
-      const s3 = reducer(s2, { type: ACTIONS.MEMORY_RECALL })
+      const s2 = reducer(s1, M('M+'))
+      const s3 = reducer(s2, M('MR'))
       expect(s3.currentOperand).toBe('4')
     })
 
@@ -272,8 +275,8 @@ describe('Memory functions', () => {
         type: ACTIONS.ADD_DIGIT,
         payload: '9',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
-      const s3 = reducer(s2, { type: ACTIONS.MEMORY_RECALL })
+      const s2 = reducer(s1, M('M+'))
+      const s3 = reducer(s2, M('MR'))
       expect(s3.overwrite).toBe(true)
     })
 
@@ -282,8 +285,8 @@ describe('Memory functions', () => {
         type: ACTIONS.ADD_DIGIT,
         payload: '2',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
-      const s3 = reducer(s2, { type: ACTIONS.MEMORY_RECALL })
+      const s2 = reducer(s1, M('M+'))
+      const s3 = reducer(s2, M('MR'))
       expect(s3.currentOperand).toBe('2')
       const s4 = reducer(s3, { type: ACTIONS.ADD_DIGIT, payload: '5' })
       expect(s4.currentOperand).toBe('5')
@@ -296,14 +299,14 @@ describe('Memory functions', () => {
         type: ACTIONS.ADD_DIGIT,
         payload: '8',
       })
-      const s2 = reducer(s1, { type: ACTIONS.MEMORY_ADD })
+      const s2 = reducer(s1, M('M+'))
       expect(s2.memory).toBe('8')
-      const s3 = reducer(s2, { type: ACTIONS.MEMORY_CLEAR })
+      const s3 = reducer(s2, M('MC'))
       expect(s3.memory).toBe('0')
     })
 
     it('memory stays 0 after clearing an already empty memory', () => {
-      const state = reducer(INITIAL_STATE, { type: ACTIONS.MEMORY_CLEAR })
+      const state = reducer(INITIAL_STATE, M('MC'))
       expect(state.memory).toBe('0')
     })
   })
@@ -319,7 +322,7 @@ describe('Memory functions', () => {
       const s4 = reducer(s3, { type: ACTIONS.EVALUATE })
       expect(s4.currentOperand).toBe('5')
       expect(s4.overwrite).toBe(true)
-      const s5 = reducer(s4, { type: ACTIONS.MEMORY_ADD })
+      const s5 = reducer(s4, M('M+'))
       expect(s5.memory).toBe('5')
       const s6 = reducer(s5, { type: ACTIONS.ADD_DIGIT, payload: '7' })
       expect(s6.currentOperand).toBe('7')
