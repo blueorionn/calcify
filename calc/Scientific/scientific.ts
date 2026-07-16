@@ -1,19 +1,5 @@
 import { evaluate, round } from 'mathjs'
 
-export const ACTIONS = {
-  CHANGE_ANGLE: 'ChangeAngle',
-  ADD_DIGIT: 'addDigit',
-  CHOOSE_OPERATION: 'chooseOperation',
-  CLEAR: 'clear',
-  DELETE: 'delete',
-  EVALUATE: 'evaluate',
-  INVERSE: 'inverse',
-  MEMORY_ADD: 'MAdd',
-  MEMORY_SUB: 'MSub',
-  MEMORY_RECALL: 'MRecall',
-  MEMORY_CLEAR: 'MClear',
-}
-
 interface STATE_TYPE {
   angle: 'deg' | 'rad'
   previousOperand: string
@@ -32,6 +18,20 @@ export const INITIAL_STATE: STATE_TYPE = {
   memory: '0',
   inverse: false,
   overwrite: false,
+}
+
+export const ACTIONS = {
+  CHANGE_ANGLE: 'ChangeAngle',
+  ADD_DIGIT: 'addDigit',
+  CHOOSE_OPERATION: 'chooseOperation',
+  CLEAR: 'clear',
+  DELETE: 'delete',
+  EVALUATE: 'evaluate',
+  INVERSE: 'inverse',
+  MEMORY_ADD: 'MAdd',
+  MEMORY_SUB: 'MSub',
+  MEMORY_RECALL: 'MRecall',
+  MEMORY_CLEAR: 'MClear',
 }
 
 export type ACTION_TYPE = {
