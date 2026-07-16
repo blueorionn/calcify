@@ -222,10 +222,10 @@ export function ExponentialButton({
 }
 
 // Operation takes place on CurrentOperand
-export function FunctionButton({ func }: { func: string }) {
+export function FunctionButton({ ftype }: { ftype: string }) {
   return (
-    <button className='bg-accent text-accent-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
-      {func}
+    <button className='bg-accent text-accent-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+      {<InlineMath math={`${ftype}`} />}
     </button>
   )
 }
