@@ -97,6 +97,7 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
         currentOperand: `${state.currentOperand.slice(0, -1)}`,
       }
     case ACTIONS.EVALUATE:
+      if (!state.operation) return state
       try {
         const result = evaluate(
           `${state.previousOperand} ${state.operation} ${state.currentOperand}`
