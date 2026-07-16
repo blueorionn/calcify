@@ -84,7 +84,8 @@ export default function ScientificCalculator() {
         </div>
 
         <div className='grid grid-cols-6 gap-1'>
-          <AngleButton active={state.angle} dispatch={dispatch} />
+          <ClearButton ctype='AC' dispatch={dispatch} />
+          <ClearButton ctype='DEL' dispatch={dispatch} />
           <MemoryButton mtype='recall' dispatch={dispatch} />
           <MemoryButton mtype='clear' dispatch={dispatch} />
           <MemoryButton mtype='sub' dispatch={dispatch} />
@@ -94,8 +95,7 @@ export default function ScientificCalculator() {
           <ConstantButton constant='e' />
           <ParenthesesButton type='(' />
           <ParenthesesButton type=')' />
-          <ClearButton ctype='AC' dispatch={dispatch} />
-          <ClearButton ctype='DEL' dispatch={dispatch} />
+          <AngleButton active={state.angle} dispatch={dispatch} />
 
           <InverseButton value={state.inverse} dispatch={dispatch} />
           <TrigButton inverse={state.inverse} trig='sin' />
