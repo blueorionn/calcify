@@ -30,6 +30,7 @@ export const ACTIONS = {
   EVALUATE: 'evaluate',
   INVERSE: 'inverse',
   MEMORY_OPERATION: 'memoryOperation',
+  EXPONENTIAL: 'exponential',
   FACTORIAL: 'factorial',
   PLUSMINUS: 'plusminus',
   ABSOLUTE: 'absolute',
@@ -50,6 +51,8 @@ function toDisplay(expr: string): string {
     .replace(/\//g, '\\div ')
     .replace(/pi/g, '\\pi')
     .replace(/abs\(([^)]*)\)/g, '\\lvert$1\\rvert')
+    .replace(/sqrt\(([^)]*)\)/g, '\\sqrt{$1}')
+    .replace(/cbrt\(([^)]*)\)/g, '\\sqrt[3]{$1}')
   return result
 }
 
@@ -181,6 +184,28 @@ const handlers: Record<string, Handler> = {
     if (action.payload === 'e') {
       if (state.expression === '0')
         return { ...state, expression: `${e}`, display: `${e}` }
+    }
+    return state
+  },
+
+  [ACTIONS.EXPONENTIAL](state, action) {
+    if (action.payload === 'square') {
+      const expr = state.inverse
+        ? `sqrt(${state.expression})`
+        : `${state.expression}^2`
+      return { ...state, expression: expr, display: toDisplay(expr) }
+    }
+    if (action.payload === 'cube') {
+      const expr = state.inverse
+        ? `cbrt(${state.expression})`
+        : `${state.expression}^3`
+      return { ...state, expression: expr, display: toDisplay(expr) }
+    }
+    if (action.payload === 'XY') {
+      const expr = state.inverse
+        ? `${state.expression}^(1/`
+        : `${state.expression}^`
+      return { ...state, expression: expr, display: toDisplay(expr) }
     }
     return state
   },

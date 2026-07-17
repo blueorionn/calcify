@@ -224,7 +224,12 @@ export function ExponentialButton({
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() =>
+        dispatch({ type: ACTIONS.EXPONENTIAL, payload: etype.name })
+      }
+    >
       {inverse ? (
         <InlineMath math={`${etype.inverse}`} />
       ) : (
