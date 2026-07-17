@@ -151,10 +151,9 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.PLUSMINUS](state) {
     if (state.expression === '0') return state
 
-    const expr = state.expression.startsWith('-')
-      ? state.expression.slice(1)
-      : `-(${state.expression})`
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    const value = evaluate(state.expression)
+    const str = String(round(-value, 10))
+    return { ...state, expression: str, display: toDisplay(str) }
   },
 
   [ACTIONS.ABSOLUTE](state) {
@@ -176,10 +175,12 @@ const handlers: Record<string, Handler> = {
 
   [ACTIONS.ADD_CONSTANT](state, action) {
     if (action.payload === 'pi') {
-      if (state.expression === '0') return { ...state, expression: `${pi}` }
+      if (state.expression === '0')
+        return { ...state, expression: `${pi}`, display: `${e}` }
     }
     if (action.payload === 'e') {
-      if (state.expression === '0') return { ...state, expression: `${e}` }
+      if (state.expression === '0')
+        return { ...state, expression: `${e}`, display: `${e}` }
     }
     return state
   },

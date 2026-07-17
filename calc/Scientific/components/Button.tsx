@@ -244,7 +244,7 @@ export function FunctionButton({
 }) {
   const functionActions: Record<string, ACTION_TYPE> = {
     fact: { type: ACTIONS.FACTORIAL },
-    opp: { type: ACTIONS.PLUSMINUS },
+    plusminus: { type: ACTIONS.PLUSMINUS },
     absolute: { type: ACTIONS.ABSOLUTE },
   }
 
