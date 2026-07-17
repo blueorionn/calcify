@@ -105,8 +105,8 @@ export default function ScientificCalculator() {
           <OperationButton operation='%' dispatch={dispatch} />
           <OperationButton operation='/' dispatch={dispatch} />
 
-          <LogButton inverse={state.inverse} ltype='log' />
-          <LogButton inverse={state.inverse} ltype='ln' />
+          <LogButton inverse={state.inverse} ltype='log' dispatch={dispatch} />
+          <LogButton inverse={state.inverse} ltype='ln' dispatch={dispatch} />
           <DigitButton digit={7} dispatch={dispatch} />
           <DigitButton digit={8} dispatch={dispatch} />
           <DigitButton digit={9} dispatch={dispatch} />

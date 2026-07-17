@@ -31,6 +31,7 @@ export const ACTIONS = {
   INVERSE: 'inverse',
   MEMORY_OPERATION: 'memoryOperation',
   EXPONENTIAL: 'exponential',
+  LOG_OPERATION: 'logOperation',
   FACTORIAL: 'factorial',
   PLUSMINUS: 'plusminus',
   ABSOLUTE: 'absolute',
@@ -47,12 +48,15 @@ type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
 function toDisplay(expr: string): string {
   const result = expr
     .replace(/\^(\d+)/g, '^{$1}')
+    .replace(/\^\(/g, '^{')
     .replace(/\*/g, '\\times ')
     .replace(/\//g, '\\div ')
     .replace(/pi/g, '\\pi')
     .replace(/abs\(([^)]*)\)/g, '\\lvert$1\\rvert')
     .replace(/sqrt\(([^)]*)\)/g, '\\sqrt{$1}')
     .replace(/cbrt\(([^)]*)\)/g, '\\sqrt[3]{$1}')
+    .replace(/log\(/g, '\\log(')
+    .replace(/ln\(/g, '\\ln(')
   return result
 }
 
@@ -205,6 +209,22 @@ const handlers: Record<string, Handler> = {
       const expr = state.inverse
         ? `${state.expression}^(1/`
         : `${state.expression}^`
+      return { ...state, expression: expr, display: toDisplay(expr) }
+    }
+    return state
+  },
+
+  [ACTIONS.LOG_OPERATION](state, action) {
+    if (action.payload === 'log') {
+      const expr = state.inverse
+        ? `10^(${state.expression})`
+        : `log(${state.expression})`
+      return { ...state, expression: expr, display: toDisplay(expr) }
+    }
+    if (action.payload === 'ln') {
+      const expr = state.inverse
+        ? `e^(${state.expression})`
+        : `ln(${state.expression})`
       return { ...state, expression: expr, display: toDisplay(expr) }
     }
     return state
