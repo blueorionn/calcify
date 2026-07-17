@@ -92,8 +92,8 @@ export default function ScientificCalculator() {
           <ClearButton ctype='AC' dispatch={dispatch} />
           <ClearButton ctype='DEL' dispatch={dispatch} />
 
-          <ConstantButton constant='pi' />
-          <ConstantButton constant='e' />
+          <ConstantButton constant='pi' dispatch={dispatch} />
+          <ConstantButton constant='e' dispatch={dispatch} />
           <ParenthesesButton type='(' />
           <ParenthesesButton type=')' />
           <AngleButton active={state.angle} dispatch={dispatch} />

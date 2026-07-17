@@ -1,4 +1,4 @@
-import { evaluate, round } from 'mathjs'
+import { evaluate, round, pi, e } from 'mathjs'
 
 interface STATE_TYPE {
   angle: 'deg' | 'rad'
@@ -24,6 +24,7 @@ export const ACTIONS = {
   CHANGE_ANGLE: 'ChangeAngle',
   ADD_DIGIT: 'addDigit',
   CHOOSE_OPERATION: 'chooseOperation',
+  ADD_CONSTANT: 'addConstant',
   CLEAR: 'clear',
   DELETE: 'delete',
   EVALUATE: 'evaluate',
@@ -171,6 +172,16 @@ const handlers: Record<string, Handler> = {
       display: toDisplay(expr),
       overwrite: false,
     }
+  },
+
+  [ACTIONS.ADD_CONSTANT](state, action) {
+    if (action.payload === 'pi') {
+      if (state.expression === '0') return { ...state, expression: `${pi}` }
+    }
+    if (action.payload === 'e') {
+      if (state.expression === '0') return { ...state, expression: `${e}` }
+    }
+    return state
   },
 }
 

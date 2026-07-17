@@ -69,9 +69,22 @@ export function OperationButton({
 }
 
 // Constants (e.g. pi, euler's constant)
-export function ConstantButton({ constant }: { constant: 'pi' | 'e' }) {
+export function ConstantButton({
+  constant,
+  dispatch,
+}: {
+  constant: 'pi' | 'e'
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() =>
+        constant === 'pi'
+          ? dispatch({ type: ACTIONS.ADD_CONSTANT, payload: 'pi' })
+          : dispatch({ type: ACTIONS.ADD_CONSTANT, payload: 'e' })
+      }
+    >
       <InlineMath
         math={`${constant === 'pi' ? '\\mathrm{\\pi}' : '\\mathrm{e}'}`}
       />
