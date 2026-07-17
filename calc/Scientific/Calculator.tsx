@@ -64,7 +64,7 @@ export default function ScientificCalculator() {
     <>
       <div
         className='bg-card border-border grid w-full max-w-lg grid-flow-row border shadow-lg'
-        style={{ aspectRatio: '9/12' }}
+        style={{ aspectRatio: '9/14' }}
       >
         {/* LCD Display */}
         <div className='mb-2 w-full overflow-hidden'>
