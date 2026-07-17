@@ -80,9 +80,7 @@ export function ConstantButton({
     <button
       className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
       onClick={() =>
-        constant === 'pi'
-          ? dispatch({ type: ACTIONS.ADD_CONSTANT, payload: 'pi' })
-          : dispatch({ type: ACTIONS.ADD_CONSTANT, payload: 'e' })
+        dispatch({ type: ACTIONS.ADD_CONSTANT, payload: constant })
       }
     >
       <InlineMath

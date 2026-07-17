@@ -46,7 +46,7 @@ type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
 
 function toDisplay(expr: string): string {
   const result = expr
-    .replace(/\^/g, '^{')
+    .replace(/\^(\d+)/g, '^{$1}')
     .replace(/\*/g, '\\times ')
     .replace(/\//g, '\\div ')
     .replace(/pi/g, '\\pi')
@@ -179,7 +179,7 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.ADD_CONSTANT](state, action) {
     if (action.payload === 'pi') {
       if (state.expression === '0')
-        return { ...state, expression: `${pi}`, display: `${e}` }
+        return { ...state, expression: `${pi}`, display: `${pi}` }
     }
     if (action.payload === 'e') {
       if (state.expression === '0')
