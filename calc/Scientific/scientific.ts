@@ -32,6 +32,7 @@ export const ACTIONS = {
   MEMORY_OPERATION: 'memoryOperation',
   EXPONENTIAL: 'exponential',
   LOG_OPERATION: 'logOperation',
+  TRIG_OPERATION: 'trigOperation',
   FACTORIAL: 'factorial',
   PLUSMINUS: 'plusminus',
   ABSOLUTE: 'absolute',
@@ -55,6 +56,12 @@ function toDisplay(expr: string): string {
     .replace(/abs\(([^)]*)\)/g, '\\lvert$1\\rvert')
     .replace(/sqrt\(([^)]*)\)/g, '\\sqrt{$1}')
     .replace(/cbrt\(([^)]*)\)/g, '\\sqrt[3]{$1}')
+    .replace(/asin\(/g, '\\arcsin(')
+    .replace(/acos\(/g, '\\arccos(')
+    .replace(/atan\(/g, '\\arctan(')
+    .replace(/sin\(/g, '\\sin(')
+    .replace(/cos\(/g, '\\cos(')
+    .replace(/tan\(/g, '\\tan(')
     .replace(/log\(/g, '\\log(')
     .replace(/ln\(/g, '\\ln(')
   return result
@@ -228,6 +235,32 @@ const handlers: Record<string, Handler> = {
       return { ...state, expression: expr, display: toDisplay(expr) }
     }
     return state
+  },
+
+  [ACTIONS.TRIG_OPERATION](state, action) {
+    const trigMap: Record<string, { normal: string; inverse: string }> = {
+      sin: { normal: 'sin', inverse: 'asin' },
+      cos: { normal: 'cos', inverse: 'acos' },
+      tan: { normal: 'tan', inverse: 'atan' },
+    }
+
+    const fn = trigMap[action.payload ?? '']
+    if (!fn) return state
+
+    const func = state.inverse ? fn.inverse : fn.normal
+    const deg = state.angle === 'deg'
+    const x = state.expression
+
+    if (deg && !state.inverse) {
+      const expr = `${func}(${x} * pi / 180)`
+      return { ...state, expression: expr, display: toDisplay(expr) }
+    }
+    if (deg && state.inverse) {
+      const expr = `${func}(${x}) * 180 / pi`
+      return { ...state, expression: expr, display: toDisplay(expr) }
+    }
+    const expr = `${func}(${x})`
+    return { ...state, expression: expr, display: toDisplay(expr) }
   },
 }
 

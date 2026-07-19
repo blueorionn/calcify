@@ -94,12 +94,17 @@ export function ConstantButton({
 export function TrigButton({
   inverse,
   trig,
+  dispatch,
 }: {
   inverse: boolean
   trig: 'sin' | 'cos' | 'tan'
+  dispatch: Dispatch<ACTION_TYPE>
 }) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() => dispatch({ type: ACTIONS.TRIG_OPERATION, payload: trig })}
+    >
       {inverse ? (
         <>
           {trig}
@@ -169,15 +174,16 @@ export function ParenthesesButton({ type }: { type: '(' | ')' }) {
 export function LogButton({
   inverse,
   ltype,
-  dispatch
+  dispatch,
 }: {
   inverse: boolean
   ltype: 'log' | 'ln'
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
-    onClick={() => dispatch({type: ACTIONS.LOG_OPERATION, payload: ltype})}
+    <button
+      className='bg-secondary text-foreground py-4 text-base font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() => dispatch({ type: ACTIONS.LOG_OPERATION, payload: ltype })}
     >
       {inverse ? (
         ltype === 'log' ? (

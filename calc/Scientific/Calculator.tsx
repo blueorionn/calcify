@@ -99,9 +99,9 @@ export default function ScientificCalculator() {
           <AngleButton active={state.angle} dispatch={dispatch} />
 
           <InverseButton value={state.inverse} dispatch={dispatch} />
-          <TrigButton inverse={state.inverse} trig='sin' />
-          <TrigButton inverse={state.inverse} trig='cos' />
-          <TrigButton inverse={state.inverse} trig='tan' />
+          <TrigButton inverse={state.inverse} trig='sin' dispatch={dispatch} />
+          <TrigButton inverse={state.inverse} trig='cos' dispatch={dispatch} />
+          <TrigButton inverse={state.inverse} trig='tan' dispatch={dispatch} />
           <OperationButton operation='%' dispatch={dispatch} />
           <OperationButton operation='/' dispatch={dispatch} />
 
