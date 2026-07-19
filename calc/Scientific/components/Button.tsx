@@ -1,10 +1,47 @@
 'use client'
 import type { Dispatch } from 'react'
 import { ACTION_TYPE, ACTIONS } from '../scientific'
-import { InlineMath } from 'react-katex'
 import { Delete } from 'lucide-react'
 
-// Digits (0-9)
+// ---- Label helpers ----
+
+function expLabel(
+  name: 'square' | 'cube' | 'XY',
+  inverse: boolean,
+): React.ReactNode {
+  if (inverse) {
+    switch (name) {
+      case 'square':
+        return <>{'\u221A'}x</> // √x
+      case 'cube':
+        return <>{'\u221B'}x</> // ∛x
+      case 'XY':
+        return (
+          <>
+            <sup>y</sup>
+            {'\u221A'}x
+          </>
+        ) // ʸ√x
+    }
+  }
+  switch (name) {
+    case 'square':
+      return <>x<sup>2</sup></> // x²
+    case 'cube':
+      return <>x<sup>3</sup></> // x³
+    case 'XY':
+      return <>x<sup>y</sup></> // xʸ
+  }
+}
+
+const FUNC_LABELS: Record<string, React.ReactNode> = {
+  fact: <>x!</>,
+  plusminus: '\u00B1', // ±
+  absolute: <>|x|</>,
+}
+
+// ---- Digits (0-9) ----
+
 export function DigitButton({
   digit,
   dispatch,
@@ -39,7 +76,8 @@ export function PeriodButton({
   )
 }
 
-// Basic Operations (add, sub, mul, div, modulus)
+// ---- Basic Operations (+, -, *, /, %) ----
+
 export function OperationButton({
   operation,
   dispatch,
@@ -52,15 +90,17 @@ export function OperationButton({
     '-': '\u2212',
     '*': '\u00D7',
     '/': '\u00F7',
-    '%': '\u0025',
-    '+-': '\u00B1',
+    '%': '%',
   }
 
   return (
     <button
       className='bg-accent text-accent-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
       onClick={() =>
-        dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: String(operation) })
+        dispatch({
+          type: ACTIONS.CHOOSE_OPERATION,
+          payload: String(operation),
+        })
       }
     >
       {operatorDisplay[operation]}
@@ -68,7 +108,8 @@ export function OperationButton({
   )
 }
 
-// Constants (e.g. pi, euler's constant)
+// ---- Constants (π, e) ----
+
 export function ConstantButton({
   constant,
   dispatch,
@@ -83,14 +124,13 @@ export function ConstantButton({
         dispatch({ type: ACTIONS.ADD_CONSTANT, payload: constant })
       }
     >
-      <InlineMath
-        math={`${constant === 'pi' ? '\\mathrm{\\pi}' : '\\mathrm{e}'}`}
-      />
+      {constant === 'pi' ? '\u03C0' : 'e'}
     </button>
   )
 }
 
-// Trig functions (sin, cos, tan) and their inverse
+// ---- Trig functions (sin, cos, tan) and their inverses ----
+
 export function TrigButton({
   inverse,
   trig,
@@ -117,7 +157,8 @@ export function TrigButton({
   )
 }
 
-// Angle Button (degree, radians)
+// ---- Angle Button (deg / rad) ----
+
 export function AngleButton({
   active,
   dispatch,
@@ -140,7 +181,9 @@ export function AngleButton({
         </span>
         <div
           className={`bg-foreground/30 h-px w-5 rounded-full transition-all duration-200 ${
-            active === 'deg' ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+            active === 'deg'
+              ? 'scale-x-100 opacity-100'
+              : 'scale-x-0 opacity-0'
           }`}
         />
       </div>
@@ -154,13 +197,17 @@ export function AngleButton({
         </span>
         <div
           className={`bg-foreground/30 h-px w-5 rounded-full transition-all duration-200 ${
-            active === 'rad' ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+            active === 'rad'
+              ? 'scale-x-100 opacity-100'
+              : 'scale-x-0 opacity-0'
           }`}
         />
       </div>
     </button>
   )
 }
+
+// ---- Parentheses ----
 
 export function ParenthesesButton({
   type,
@@ -179,7 +226,8 @@ export function ParenthesesButton({
   )
 }
 
-// Logs (base10, natural) and their inverse (10^x, e^x)
+// ---- Logs (log, ln) and their inverses (10^x, e^x) ----
+
 export function LogButton({
   inverse,
   ltype,
@@ -196,9 +244,9 @@ export function LogButton({
     >
       {inverse ? (
         ltype === 'log' ? (
-          <InlineMath math='\mathsf{10^{x}}' />
+          <>10<sup>x</sup></>
         ) : (
-          <InlineMath math='\mathsf{e^{x}}' />
+          <>e<sup>x</sup></>
         )
       ) : (
         ltype
@@ -206,6 +254,8 @@ export function LogButton({
     </button>
   )
 }
+
+// ---- 2nd (inverse toggle) ----
 
 export function InverseButton({
   value,
@@ -215,29 +265,24 @@ export function InverseButton({
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   return (
-    <>
-      <button
-        className={`bg-secondary py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75 ${value ? 'text-foreground' : 'text-foreground/50'}`}
-        onClick={() => dispatch({ type: ACTIONS.INVERSE })}
-      >
-        2nd
-      </button>
-    </>
+    <button
+      className={`bg-secondary py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75 ${value ? 'text-foreground' : 'text-foreground/50'}`}
+      onClick={() => dispatch({ type: ACTIONS.INVERSE })}
+    >
+      2nd
+    </button>
   )
 }
 
-// exponential buttons (e.g. xʸ, x¹∕ʸ)
+// ---- Exponential buttons (x², x³, xʸ and inverses) ----
+
 export function ExponentialButton({
   inverse,
   etype,
   dispatch,
 }: {
   inverse: boolean
-  etype: {
-    name: 'square' | 'cube' | 'XY'
-    normal: string
-    inverse: string
-  }
+  etype: { name: 'square' | 'cube' | 'XY' }
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   return (
@@ -247,21 +292,18 @@ export function ExponentialButton({
         dispatch({ type: ACTIONS.EXPONENTIAL, payload: etype.name })
       }
     >
-      {inverse ? (
-        <InlineMath math={`${etype.inverse}`} />
-      ) : (
-        <InlineMath math={`${etype.normal}`} />
-      )}
+      {expLabel(etype.name, inverse)}
     </button>
   )
 }
 
-// Operation takes place on CurrentOperand
+// ---- Function buttons (x!, ±, |x|) ----
+
 export function FunctionButton({
   ftype,
   dispatch,
 }: {
-  ftype: { fname: 'fact' | 'plusminus' | 'absolute'; ffunc: string }
+  ftype: { fname: 'fact' | 'plusminus' | 'absolute' }
   dispatch: Dispatch<ACTION_TYPE>
 }) {
   const functionActions: Record<string, ACTION_TYPE> = {
@@ -278,12 +320,13 @@ export function FunctionButton({
         if (action) dispatch(action)
       }}
     >
-      {<InlineMath math={`${ftype.ffunc}`} />}
+      {FUNC_LABELS[ftype.fname]}
     </button>
   )
 }
 
-// Evaluate (=)
+// ---- Evaluate (=) ----
+
 export function EvaluateButton({
   dispatch,
 }: {
@@ -299,7 +342,8 @@ export function EvaluateButton({
   )
 }
 
-// Memory Function Button
+// ---- Memory buttons (MC, MR, M+, M-) ----
+
 export function MemoryButton({
   mtype,
   dispatch,
@@ -332,7 +376,8 @@ export function MemoryButton({
   )
 }
 
-// Clear and Delete Button
+// ---- Clear / Delete ----
+
 export function ClearButton({
   ctype,
   dispatch,

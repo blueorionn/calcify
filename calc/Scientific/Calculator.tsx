@@ -1,6 +1,7 @@
 'use client'
 import { useReducer, useEffect } from 'react'
 import { INITIAL_STATE, ACTIONS, reducer } from './scientific'
+import { MathDisplay } from '@/lib/mathDisplay'
 import {
   AngleButton,
   DigitButton,
@@ -17,8 +18,6 @@ import {
   ClearButton,
   EvaluateButton,
 } from './components/Button'
-import 'katex/dist/katex.min.css'
-import { InlineMath } from 'react-katex'
 
 export default function ScientificCalculator() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
@@ -79,7 +78,7 @@ export default function ScientificCalculator() {
               className='text-foreground hide-scrollbar overflow-x-scroll py-0.5 text-3xl font-light tracking-tight'
               aria-label='Current Operand'
             >
-              {<InlineMath math={`\\mathtt${state.display}`} />}
+              <MathDisplay expression={state.expression} />
             </div>
           </div>
         </div>
@@ -112,55 +111,22 @@ export default function ScientificCalculator() {
           <DigitButton digit={9} dispatch={dispatch} />
           <OperationButton operation='*' dispatch={dispatch} />
 
-          <ExponentialButton
-            inverse={state.inverse}
-            etype={{
-              name: 'square',
-              normal: '\\mathsf{x^2}',
-              inverse: '\\mathsf{\\sqrt{x}}',
-            }}
-            dispatch={dispatch}
-          />
-          <ExponentialButton
-            inverse={state.inverse}
-            etype={{
-              name: 'cube',
-              normal: '\\mathsf{x^3}',
-              inverse: '\\mathsf{\\sqrt[3]{x}}',
-            }}
-            dispatch={dispatch}
-          />
+          <ExponentialButton inverse={state.inverse} etype={{ name: 'square' }} dispatch={dispatch} />
+          <ExponentialButton inverse={state.inverse} etype={{ name: 'cube' }} dispatch={dispatch} />
           <DigitButton digit={4} dispatch={dispatch} />
           <DigitButton digit={5} dispatch={dispatch} />
           <DigitButton digit={6} dispatch={dispatch} />
           <OperationButton operation='-' dispatch={dispatch} />
 
-          <ExponentialButton
-            inverse={state.inverse}
-            etype={{
-              name: 'XY',
-              normal: '\\mathsf{x^{y}}',
-              inverse: '\\mathsf{\\sqrt[y]{x}}',
-            }}
-            dispatch={dispatch}
-          />
-          <FunctionButton
-            ftype={{ fname: 'fact', ffunc: '\\mathsf{x!}' }}
-            dispatch={dispatch}
-          />
+          <ExponentialButton inverse={state.inverse} etype={{ name: 'XY' }} dispatch={dispatch} />
+          <FunctionButton ftype={{ fname: 'fact' }} dispatch={dispatch} />
           <DigitButton digit={1} dispatch={dispatch} />
           <DigitButton digit={2} dispatch={dispatch} />
           <DigitButton digit={3} dispatch={dispatch} />
           <OperationButton operation='+' dispatch={dispatch} />
 
-          <FunctionButton
-            ftype={{ fname: 'plusminus', ffunc: '\\mathsf{\\pm}' }}
-            dispatch={dispatch}
-          />
-          <FunctionButton
-            ftype={{ fname: 'absolute', ffunc: '\\mathsf{|x|}' }}
-            dispatch={dispatch}
-          />
+          <FunctionButton ftype={{ fname: 'plusminus' }} dispatch={dispatch} />
+          <FunctionButton ftype={{ fname: 'absolute' }} dispatch={dispatch} />
           <PeriodButton dispatch={dispatch} />
           <DigitButton digit={0} dispatch={dispatch} />
           <EvaluateButton dispatch={dispatch} />

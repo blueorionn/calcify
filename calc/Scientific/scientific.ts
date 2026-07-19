@@ -3,7 +3,6 @@ import { evaluate, round, pi, e } from 'mathjs'
 interface STATE_TYPE {
   angle: 'deg' | 'rad'
   expression: string
-  display: string
   previousAnswer: string
   memory: string
   inverse: boolean
@@ -13,7 +12,6 @@ interface STATE_TYPE {
 export const INITIAL_STATE: STATE_TYPE = {
   angle: 'deg',
   expression: '0',
-  display: '0',
   previousAnswer: '0',
   memory: '0',
   inverse: false,
@@ -47,27 +45,6 @@ export type ACTION_TYPE = {
 
 type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
 
-function toDisplay(expr: string): string {
-  const result = expr
-    .replace(/\^(\d+)/g, '^{$1}')
-    .replace(/\^\(/g, '^{')
-    .replace(/\*/g, '\\times ')
-    .replace(/\//g, '\\div ')
-    .replace(/pi/g, '\\pi')
-    .replace(/abs\(([^)]*)\)/g, '\\lvert$1\\rvert')
-    .replace(/sqrt\(([^)]*)\)/g, '\\sqrt{$1}')
-    .replace(/cbrt\(([^)]*)\)/g, '\\sqrt[3]{$1}')
-    .replace(/asin\(/g, '\\arcsin(')
-    .replace(/acos\(/g, '\\arccos(')
-    .replace(/atan\(/g, '\\arctan(')
-    .replace(/sin\(/g, '\\sin(')
-    .replace(/cos\(/g, '\\cos(')
-    .replace(/tan\(/g, '\\tan(')
-    .replace(/log\(/g, '\\log(')
-    .replace(/ln\(/g, '\\ln(')
-  return result
-}
-
 const handlers: Record<string, Handler> = {
   [ACTIONS.ADD_DIGIT](state, action) {
     if (state.overwrite) {
@@ -75,7 +52,6 @@ const handlers: Record<string, Handler> = {
       return {
         ...state,
         expression: expr,
-        display: toDisplay(expr),
         overwrite: false,
       }
     }
@@ -83,12 +59,12 @@ const handlers: Record<string, Handler> = {
       state.expression === '0' && action.payload !== '.'
         ? (action.payload ?? '0')
         : state.expression + (action.payload ?? '')
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    return { ...state, expression: expr }
   },
 
   [ACTIONS.CHOOSE_OPERATION](state, action) {
     const expr = `${state.expression} ${action.payload} `
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    return { ...state, expression: expr }
   },
 
   [ACTIONS.CHANGE_ANGLE](state) {
@@ -102,7 +78,7 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.DELETE](state) {
     const expr =
       state.expression.length <= 1 ? '0' : state.expression.slice(0, -1)
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    return { ...state, expression: expr }
   },
 
   [ACTIONS.EVALUATE](state) {
@@ -112,7 +88,6 @@ const handlers: Record<string, Handler> = {
       return {
         ...state,
         expression: str,
-        display: toDisplay(str),
         previousAnswer: str,
         overwrite: true,
       }
@@ -132,7 +107,6 @@ const handlers: Record<string, Handler> = {
       return {
         ...state,
         expression: state.memory,
-        display: toDisplay(state.memory),
         overwrite: true,
       }
 
@@ -160,7 +134,7 @@ const handlers: Record<string, Handler> = {
 
   [ACTIONS.FACTORIAL](state) {
     const expr = `${state.expression}!`
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    return { ...state, expression: expr }
   },
 
   [ACTIONS.PLUSMINUS](state) {
@@ -168,12 +142,12 @@ const handlers: Record<string, Handler> = {
 
     const value = evaluate(state.expression)
     const str = String(round(-value, 10))
-    return { ...state, expression: str, display: toDisplay(str) }
+    return { ...state, expression: str }
   },
 
   [ACTIONS.ABSOLUTE](state) {
     const expr = `abs(${state.expression})`
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    return { ...state, expression: expr }
   },
 
   [ACTIONS.ANSWER](state) {
@@ -183,7 +157,6 @@ const handlers: Record<string, Handler> = {
     return {
       ...state,
       expression: expr,
-      display: toDisplay(expr),
       overwrite: false,
     }
   },
@@ -191,11 +164,11 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.ADD_CONSTANT](state, action) {
     if (action.payload === 'pi') {
       if (state.expression === '0')
-        return { ...state, expression: `${pi}`, display: `${pi}` }
+        return { ...state, expression: `${pi}` }
     }
     if (action.payload === 'e') {
       if (state.expression === '0')
-        return { ...state, expression: `${e}`, display: `${e}` }
+        return { ...state, expression: `${e}` }
     }
     return state
   },
@@ -205,19 +178,19 @@ const handlers: Record<string, Handler> = {
       const expr = state.inverse
         ? `sqrt(${state.expression})`
         : `${state.expression}^2`
-      return { ...state, expression: expr, display: toDisplay(expr) }
+      return { ...state, expression: expr }
     }
     if (action.payload === 'cube') {
       const expr = state.inverse
         ? `cbrt(${state.expression})`
         : `${state.expression}^3`
-      return { ...state, expression: expr, display: toDisplay(expr) }
+      return { ...state, expression: expr }
     }
     if (action.payload === 'XY') {
       const expr = state.inverse
         ? `${state.expression}^(1/`
         : `${state.expression}^`
-      return { ...state, expression: expr, display: toDisplay(expr) }
+      return { ...state, expression: expr }
     }
     return state
   },
@@ -227,20 +200,20 @@ const handlers: Record<string, Handler> = {
       const expr = state.inverse
         ? `10^(${state.expression})`
         : `log(${state.expression})`
-      return { ...state, expression: expr, display: toDisplay(expr) }
+      return { ...state, expression: expr }
     }
     if (action.payload === 'ln') {
       const expr = state.inverse
         ? `e^(${state.expression})`
         : `ln(${state.expression})`
-      return { ...state, expression: expr, display: toDisplay(expr) }
+      return { ...state, expression: expr }
     }
     return state
   },
 
   [ACTIONS.PARENTHESES](state, action) {
     const expr = `${state.expression}${action.payload}`
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    return { ...state, expression: expr }
   },
 
   [ACTIONS.TRIG_OPERATION](state, action) {
@@ -259,14 +232,14 @@ const handlers: Record<string, Handler> = {
 
     if (deg && !state.inverse) {
       const expr = `${func}(${x} * pi / 180)`
-      return { ...state, expression: expr, display: toDisplay(expr) }
+      return { ...state, expression: expr }
     }
     if (deg && state.inverse) {
       const expr = `${func}(${x}) * 180 / pi`
-      return { ...state, expression: expr, display: toDisplay(expr) }
+      return { ...state, expression: expr }
     }
     const expr = `${func}(${x})`
-    return { ...state, expression: expr, display: toDisplay(expr) }
+    return { ...state, expression: expr }
   },
 }
 
