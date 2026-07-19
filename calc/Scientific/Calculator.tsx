@@ -94,8 +94,8 @@ export default function ScientificCalculator() {
 
           <ConstantButton constant='pi' dispatch={dispatch} />
           <ConstantButton constant='e' dispatch={dispatch} />
-          <ParenthesesButton type='(' />
-          <ParenthesesButton type=')' />
+          <ParenthesesButton type='(' dispatch={dispatch} />
+          <ParenthesesButton type=')' dispatch={dispatch} />
           <AngleButton active={state.angle} dispatch={dispatch} />
 
           <InverseButton value={state.inverse} dispatch={dispatch} />

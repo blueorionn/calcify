@@ -33,6 +33,7 @@ export const ACTIONS = {
   EXPONENTIAL: 'exponential',
   LOG_OPERATION: 'logOperation',
   TRIG_OPERATION: 'trigOperation',
+  PARENTHESES: 'parentheses',
   FACTORIAL: 'factorial',
   PLUSMINUS: 'plusminus',
   ABSOLUTE: 'absolute',
@@ -235,6 +236,11 @@ const handlers: Record<string, Handler> = {
       return { ...state, expression: expr, display: toDisplay(expr) }
     }
     return state
+  },
+
+  [ACTIONS.PARENTHESES](state, action) {
+    const expr = `${state.expression}${action.payload}`
+    return { ...state, expression: expr, display: toDisplay(expr) }
   },
 
   [ACTIONS.TRIG_OPERATION](state, action) {

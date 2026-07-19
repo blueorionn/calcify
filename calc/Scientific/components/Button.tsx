@@ -162,9 +162,18 @@ export function AngleButton({
   )
 }
 
-export function ParenthesesButton({ type }: { type: '(' | ')' }) {
+export function ParenthesesButton({
+  type,
+  dispatch,
+}: {
+  type: '(' | ')'
+  dispatch: Dispatch<ACTION_TYPE>
+}) {
   return (
-    <button className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'>
+    <button
+      className='bg-secondary text-foreground py-4 text-xl font-medium transition-colors duration-200 hover:brightness-85 active:brightness-75'
+      onClick={() => dispatch({ type: ACTIONS.PARENTHESES, payload: type })}
+    >
       {type}
     </button>
   )
