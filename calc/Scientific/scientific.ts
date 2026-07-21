@@ -95,8 +95,11 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.EVALUATE](state) {
-    if (!areParensBalanced(state.expression)){
-      return {...state, error: 'Mismatched parentheses — check your ( and ) count.'}
+    if (!areParensBalanced(state.expression)) {
+      return {
+        ...state,
+        error: 'Mismatched parentheses — check your ( and ) count.',
+      }
     }
 
     try {
@@ -107,10 +110,10 @@ const handlers: Record<string, Handler> = {
         expression: str,
         previousAnswer: str,
         overwrite: true,
-        error: null
+        error: null,
       }
     } catch {
-      return {...state, error: 'Could not evaluate the expression.'}
+      return { ...state, error: 'Could not evaluate the expression.' }
     }
   },
 
@@ -180,12 +183,10 @@ const handlers: Record<string, Handler> = {
 
   [ACTIONS.ADD_CONSTANT](state, action) {
     if (action.payload === 'pi') {
-      if (state.expression === '0')
-        return { ...state, expression: `${pi}` }
+      if (state.expression === '0') return { ...state, expression: `${pi}` }
     }
     if (action.payload === 'e') {
-      if (state.expression === '0')
-        return { ...state, expression: `${e}` }
+      if (state.expression === '0') return { ...state, expression: `${e}` }
     }
     return state
   },

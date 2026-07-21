@@ -70,7 +70,10 @@ export default function ScientificCalculator() {
         <div className='mb-2 w-full overflow-hidden'>
           <div>
             {state.error && (
-              <Alert variant='destructive' className='mx-4 mb-1 rounded-none border-0 border-b px-3 py-1.5'>
+              <Alert
+                variant='destructive'
+                className='mx-4 mb-1 rounded-none border-0 border-b px-3 py-1.5'
+              >
                 <AlertDescription>{state.error}</AlertDescription>
               </Alert>
             )}
@@ -119,14 +122,26 @@ export default function ScientificCalculator() {
           <DigitButton digit={9} dispatch={dispatch} />
           <OperationButton operation='*' dispatch={dispatch} />
 
-          <ExponentialButton inverse={state.inverse} etype={{ name: 'square' }} dispatch={dispatch} />
-          <ExponentialButton inverse={state.inverse} etype={{ name: 'cube' }} dispatch={dispatch} />
+          <ExponentialButton
+            inverse={state.inverse}
+            etype={{ name: 'square' }}
+            dispatch={dispatch}
+          />
+          <ExponentialButton
+            inverse={state.inverse}
+            etype={{ name: 'cube' }}
+            dispatch={dispatch}
+          />
           <DigitButton digit={4} dispatch={dispatch} />
           <DigitButton digit={5} dispatch={dispatch} />
           <DigitButton digit={6} dispatch={dispatch} />
           <OperationButton operation='-' dispatch={dispatch} />
 
-          <ExponentialButton inverse={state.inverse} etype={{ name: 'XY' }} dispatch={dispatch} />
+          <ExponentialButton
+            inverse={state.inverse}
+            etype={{ name: 'XY' }}
+            dispatch={dispatch}
+          />
           <FunctionButton ftype={{ fname: 'fact' }} dispatch={dispatch} />
           <DigitButton digit={1} dispatch={dispatch} />
           <DigitButton digit={2} dispatch={dispatch} />

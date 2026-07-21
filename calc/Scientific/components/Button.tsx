@@ -7,7 +7,7 @@ import { Delete } from 'lucide-react'
 
 function expLabel(
   name: 'square' | 'cube' | 'XY',
-  inverse: boolean,
+  inverse: boolean
 ): React.ReactNode {
   if (inverse) {
     switch (name) {
@@ -26,11 +26,23 @@ function expLabel(
   }
   switch (name) {
     case 'square':
-      return <>x<sup>2</sup></> // x²
+      return (
+        <>
+          x<sup>2</sup>
+        </>
+      ) // x²
     case 'cube':
-      return <>x<sup>3</sup></> // x³
+      return (
+        <>
+          x<sup>3</sup>
+        </>
+      ) // x³
     case 'XY':
-      return <>x<sup>y</sup></> // xʸ
+      return (
+        <>
+          x<sup>y</sup>
+        </>
+      ) // xʸ
   }
 }
 
@@ -181,9 +193,7 @@ export function AngleButton({
         </span>
         <div
           className={`bg-foreground/30 h-px w-5 rounded-full transition-all duration-200 ${
-            active === 'deg'
-              ? 'scale-x-100 opacity-100'
-              : 'scale-x-0 opacity-0'
+            active === 'deg' ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
           }`}
         />
       </div>
@@ -197,9 +207,7 @@ export function AngleButton({
         </span>
         <div
           className={`bg-foreground/30 h-px w-5 rounded-full transition-all duration-200 ${
-            active === 'rad'
-              ? 'scale-x-100 opacity-100'
-              : 'scale-x-0 opacity-0'
+            active === 'rad' ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
           }`}
         />
       </div>
@@ -244,9 +252,13 @@ export function LogButton({
     >
       {inverse ? (
         ltype === 'log' ? (
-          <>10<sup>x</sup></>
+          <>
+            10<sup>x</sup>
+          </>
         ) : (
-          <>e<sup>x</sup></>
+          <>
+            e<sup>x</sup>
+          </>
         )
       ) : (
         ltype
