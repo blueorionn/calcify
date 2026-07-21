@@ -1,4 +1,4 @@
-import { evaluate, round, pi, e } from 'mathjs'
+import { evaluate, round } from 'mathjs'
 
 interface STATE_TYPE {
   error: string | null
@@ -8,6 +8,7 @@ interface STATE_TYPE {
   memory: string
   inverse: boolean
   overwrite: boolean
+  history: string[]
 }
 
 export const INITIAL_STATE: STATE_TYPE = {
@@ -18,6 +19,7 @@ export const INITIAL_STATE: STATE_TYPE = {
   memory: '0',
   inverse: false,
   overwrite: false,
+  history: []
 }
 
 export const ACTIONS = {
@@ -86,12 +88,6 @@ const handlers: Record<string, Handler> = {
 
   [ACTIONS.CLEAR]() {
     return INITIAL_STATE
-  },
-
-  [ACTIONS.DELETE](state) {
-    const expr =
-      state.expression.length <= 1 ? '0' : state.expression.slice(0, -1)
-    return { ...state, expression: expr }
   },
 
   [ACTIONS.EVALUATE](state) {
@@ -265,15 +261,35 @@ const handlers: Record<string, Handler> = {
 }
 
 export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
+  // DELETE is full undo — pop the previous expression from history
+  if (action.type === ACTIONS.DELETE) {
+    if (state.history.length === 0) {
+      return { ...state, expression: '0', overwrite: false, error: null }
+    }
+    const prev = state.history[state.history.length - 1]
+    return {
+      ...state,
+      expression: prev,
+      history: state.history.slice(0, -1),
+      overwrite: false,
+      error: null,
+    }
+  }
+
   const handler = handlers[action.type]
   if (!handler) return state
 
-  const next = handler(state, action)
+  let next = handler(state, action)
 
-  // Only EVALUATE is allowed to set or preserve an error.
-  // Every other action clears any stale error automatically.
+  // Only EVALUATE preserves error; every other action clears it
   if (action.type !== ACTIONS.EVALUATE && next.error) {
-    return { ...next, error: null }
+    next = { ...next, error: null }
   }
+
+  // Auto-push previous expression to history whenever expression changes
+  if (next.expression !== state.expression) {
+    next = { ...next, history: [...state.history, state.expression] }
+  }
+
   return next
 }
