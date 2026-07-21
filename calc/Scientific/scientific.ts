@@ -108,6 +108,51 @@ function convertDegreeTrig(expr: string): string {
   return result
 }
 
+/** Find the last number in the expression and toggle its sign.
+ *  Returns the updated expression string, or null if no togglable number exists. */
+function toggleLastNumber(expr: string): string | null {
+  let i = expr.length - 1
+
+  // Skip trailing whitespace
+  while (i >= 0 && expr[i] === ' ') i--
+  if (i < 0) return null
+
+  // Skip trailing )
+  while (i >= 0 && expr[i] === ')') i--
+  if (i < 0 || !/[0-9]/.test(expr[i])) return null
+
+  // Collect digits and decimal points going backwards
+  const numEnd = i + 1
+  while (i >= 0 && /[0-9.]/.test(expr[i])) i--
+  const digitStart = i + 1
+
+  // Check for a unary minus immediately before the digits
+  let minusPos = -1
+  if (i >= 0 && expr[i] === '-') {
+    // Unary minus if at start-of-string, or preceded by ( or space
+    if (i === 0 || expr[i - 1] === '(' || expr[i - 1] === ' ') {
+      minusPos = i
+      i--
+    }
+  }
+
+  const digits = expr.slice(digitStart, numEnd)
+
+  // Don't toggle plain zero
+  if (parseFloat(digits) === 0) return null
+
+  const numStart = minusPos >= 0 ? minusPos : digitStart
+  const prefix = expr.slice(0, numStart)
+  const suffix = expr.slice(numEnd)
+
+  if (minusPos >= 0) {
+    // Remove the unary minus: -45 → 45
+    return prefix + digits + suffix
+  }
+  // Insert a unary minus: 45 → -45
+  return prefix + '-' + digits + suffix
+}
+
 type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
 
 const handlers: Record<string, Handler> = {
@@ -208,11 +253,9 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.PLUSMINUS](state) {
-    if (state.expression === '0') return state
-
-    const value = evaluate(state.expression)
-    const str = String(round(-value, 10))
-    return { ...state, expression: str }
+    const expr = toggleLastNumber(state.expression)
+    if (!expr) return state
+    return { ...state, expression: expr }
   },
 
   [ACTIONS.ABSOLUTE](state) {
