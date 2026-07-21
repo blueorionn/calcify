@@ -241,7 +241,7 @@ function renderTokens(tokens: Token[], keyPrefix = ''): React.ReactNode[] {
         nodes.push(
           <span key={k} className='math-deg'>
             {'\u00B0'}
-          </span>,
+          </span>
         )
         i++
         break
@@ -293,10 +293,7 @@ function renderTokens(tokens: Token[], keyPrefix = ''): React.ReactNode[] {
 const DEG_TRIG = new Set(['sin', 'cos', 'tan'])
 
 /** In degree mode, insert a `°` token before the closing `)` of every sin/cos/tan call. */
-function insertDegreeSymbols(
-  tokens: Token[],
-  angle: 'deg' | 'rad',
-): Token[] {
+function insertDegreeSymbols(tokens: Token[], angle: 'deg' | 'rad'): Token[] {
   if (angle !== 'deg') return tokens
 
   const result: Token[] = []

@@ -19,7 +19,7 @@ export const INITIAL_STATE: STATE_TYPE = {
   memory: '0',
   inverse: false,
   overwrite: false,
-  history: []
+  history: [],
 }
 
 export const ACTIONS = {
