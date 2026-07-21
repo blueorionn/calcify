@@ -8,7 +8,6 @@ interface STATE_TYPE {
   memory: string
   inverse: boolean
   overwrite: boolean
-  history: string[]
 }
 
 export const INITIAL_STATE: STATE_TYPE = {
@@ -19,7 +18,6 @@ export const INITIAL_STATE: STATE_TYPE = {
   memory: '0',
   inverse: false,
   overwrite: false,
-  history: [],
 }
 
 export const ACTIONS = {
@@ -151,6 +149,50 @@ function toggleLastNumber(expr: string): string | null {
   }
   // Insert a unary minus: 45 → -45
   return prefix + '-' + digits + suffix
+}
+
+/** Smart backspace — removes the last logical component instead of one character.
+ *  Stops when expression is '0'. */
+function smartBackspace(expr: string): string {
+  if (expr === '0' || expr.length <= 1) return '0'
+
+  // Binary operator with spaces: " + ", " - ", " * ", " / ", " % "
+  if (/ [+\-*/%] $/.test(expr)) return expr.slice(0, -3) || '0'
+
+  // Function prefix ending with '(' : "sin(", "cos(", "log(", etc.
+  const FUNCTIONS = [
+    'sin(',
+    'cos(',
+    'tan(',
+    'asin(',
+    'acos(',
+    'atan(',
+    'log(',
+    'ln(',
+    'sqrt(',
+    'cbrt(',
+    'abs(',
+  ]
+  for (const fn of FUNCTIONS) {
+    if (expr.endsWith(fn)) return expr.slice(0, -fn.length) || '0'
+  }
+
+  // Exponent suffix: "^2", "^3"
+  if (expr.endsWith('^2') || expr.endsWith('^3'))
+    return expr.slice(0, -2) || '0'
+
+  // "^(" — remove both chars
+  if (expr.endsWith('^(')) return expr.slice(0, -2) || '0'
+
+  // Constant "pi" (only when preceded by non-alpha or start-of-string)
+  if (
+    expr.endsWith('pi') &&
+    (expr.length === 2 || !/[a-zA-Z]/.test(expr[expr.length - 3]))
+  ) {
+    return expr.slice(0, -2) || '0'
+  }
+
+  return expr.slice(0, -1) || '0'
 }
 
 type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
@@ -352,16 +394,11 @@ const handlers: Record<string, Handler> = {
 }
 
 export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
-  // DELETE is full undo — pop the previous expression from history
+  // DELETE removes the last component; stops at '0'
   if (action.type === ACTIONS.DELETE) {
-    if (state.history.length === 0) {
-      return { ...state, expression: '0', overwrite: false, error: null }
-    }
-    const prev = state.history[state.history.length - 1]
     return {
       ...state,
-      expression: prev,
-      history: state.history.slice(0, -1),
+      expression: smartBackspace(state.expression),
       overwrite: false,
       error: null,
     }
@@ -375,11 +412,6 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
   // Only EVALUATE preserves error; every other action clears it
   if (action.type !== ACTIONS.EVALUATE && next.error) {
     next = { ...next, error: null }
-  }
-
-  // Auto-push previous expression to history whenever expression changes
-  if (next.expression !== state.expression) {
-    next = { ...next, history: [...state.history, state.expression] }
   }
 
   return next
