@@ -58,6 +58,56 @@ function areParensBalanced(expr: string): boolean {
   return depth === 0
 }
 
+/** Find the index of the `)` that closes the `(` at `openIdx`. Returns -1 if no match. */
+function findParenClose(expr: string, openIdx: number): number {
+  let depth = 0
+  for (let j = openIdx; j < expr.length; j++) {
+    if (expr[j] === '(') depth++
+    if (expr[j] === ')') depth--
+    if (depth === 0) return j
+  }
+  return -1
+}
+
+/** In degree mode, convert sin(x) → sin((x) * pi / 180) and asin(x) → asin(x) * 180 / pi. */
+function convertDegreeTrig(expr: string): string {
+  const TRIG = ['sin', 'cos', 'tan']
+  const INV_TRIG = ['asin', 'acos', 'atan']
+  const all = [...TRIG, ...INV_TRIG]
+
+  let result = ''
+  let i = 0
+
+  while (i < expr.length) {
+    let matched = false
+
+    for (const fn of all) {
+      if (expr.startsWith(`${fn}(`, i)) {
+        const openIdx = i + fn.length
+        const closeIdx = findParenClose(expr, openIdx)
+        if (closeIdx === -1) break
+        const inner = expr.slice(openIdx + 1, closeIdx)
+
+        if (TRIG.includes(fn)) {
+          result += `${fn}((${inner}) * pi / 180)`
+        } else {
+          result += `${fn}(${inner}) * 180 / pi`
+        }
+        i = closeIdx + 1
+        matched = true
+        break
+      }
+    }
+
+    if (!matched) {
+      result += expr[i]
+      i++
+    }
+  }
+
+  return result
+}
+
 type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
 
 const handlers: Record<string, Handler> = {
@@ -99,7 +149,11 @@ const handlers: Record<string, Handler> = {
     }
 
     try {
-      const result = evaluate(state.expression)
+      const expr =
+        state.angle === 'deg'
+          ? convertDegreeTrig(state.expression)
+          : state.expression
+      const result = evaluate(expr)
       const str = String(round(result, 10))
       return {
         ...state,
@@ -234,29 +288,23 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.TRIG_OPERATION](state, action) {
-    const trigMap: Record<string, { normal: string; inverse: string }> = {
-      sin: { normal: 'sin', inverse: 'asin' },
-      cos: { normal: 'cos', inverse: 'acos' },
-      tan: { normal: 'tan', inverse: 'atan' },
+    const trigMap: Record<string, string> = {
+      sin: 'sin',
+      cos: 'cos',
+      tan: 'tan',
     }
 
-    const fn = trigMap[action.payload ?? '']
-    if (!fn) return state
+    const name = trigMap[action.payload ?? '']
+    if (!name) return state
 
-    const func = state.inverse ? fn.inverse : fn.normal
-    const deg = state.angle === 'deg'
-    const x = state.expression
+    const func = state.inverse ? `a${name}` : name
 
-    if (deg && !state.inverse) {
-      const expr = `${func}(${x} * pi / 180)`
-      return { ...state, expression: expr }
-    }
-    if (deg && state.inverse) {
-      const expr = `${func}(${x}) * 180 / pi`
-      return { ...state, expression: expr }
-    }
-    const expr = `${func}(${x})`
-    return { ...state, expression: expr }
+    const expr =
+      state.expression === '0' || state.overwrite
+        ? `${func}(`
+        : `${state.expression}${func}(`
+
+    return { ...state, expression: expr, overwrite: false }
   },
 }
 

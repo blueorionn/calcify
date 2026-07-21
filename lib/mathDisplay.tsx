@@ -44,6 +44,7 @@ type Token =
   | { kind: 'lparen' }
   | { kind: 'rparen' }
   | { kind: 'fact' }
+  | { kind: 'deg' }
   | { kind: 'pow' }
   | { kind: 'space'; raw: string }
 
@@ -119,6 +120,9 @@ function tokenize(expr: string): Token[] {
         break
       case '!':
         tokens.push({ kind: 'fact' })
+        break
+      case '\u00B0':
+        tokens.push({ kind: 'deg' })
         break
       default:
         // Unknown character — skip silently
@@ -233,6 +237,15 @@ function renderTokens(tokens: Token[], keyPrefix = ''): React.ReactNode[] {
         i++
         break
 
+      case 'deg':
+        nodes.push(
+          <span key={k} className='math-deg'>
+            {'\u00B0'}
+          </span>,
+        )
+        i++
+        break
+
       case 'pow': {
         i++ // skip the ^ token itself
         if (i >= tokens.length) {
@@ -277,15 +290,59 @@ function renderTokens(tokens: Token[], keyPrefix = ''): React.ReactNode[] {
 
 // ---- Public component ----
 
+const DEG_TRIG = new Set(['sin', 'cos', 'tan'])
+
+/** In degree mode, insert a `°` token before the closing `)` of every sin/cos/tan call. */
+function insertDegreeSymbols(
+  tokens: Token[],
+  angle: 'deg' | 'rad',
+): Token[] {
+  if (angle !== 'deg') return tokens
+
+  const result: Token[] = []
+  let i = 0
+
+  while (i < tokens.length) {
+    const t = tokens[i]
+    if (
+      t.kind === 'func' &&
+      DEG_TRIG.has(t.raw) &&
+      i + 1 < tokens.length &&
+      tokens[i + 1].kind === 'lparen'
+    ) {
+      const closeIdx = findMatchingParen(tokens, i + 1)
+      const end = closeIdx < tokens.length ? closeIdx : tokens.length
+      for (let j = i; j < end; j++) {
+        result.push(tokens[j])
+      }
+      result.push({ kind: 'deg' })
+      if (closeIdx < tokens.length) {
+        result.push(tokens[closeIdx])
+      }
+      i = closeIdx < tokens.length ? closeIdx + 1 : tokens.length
+    } else {
+      result.push(t)
+      i++
+    }
+  }
+
+  return result
+}
+
 export function MathDisplay({
   expression,
+  angle = 'rad',
   className = '',
 }: {
   expression: string
+  angle?: 'deg' | 'rad'
   className?: string
 }) {
   const tokens = tokenize(expression)
+  const transformed = insertDegreeSymbols(tokens, angle)
   return (
-    <span className={`math-display ${className}`}>{renderTokens(tokens)}</span>
+    <span className={`math-display ${className}`}>
+      {renderTokens(transformed)}
+    </span>
   )
 }

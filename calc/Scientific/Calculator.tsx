@@ -89,7 +89,7 @@ export default function ScientificCalculator() {
               className='text-foreground hide-scrollbar overflow-x-scroll py-0.5 text-3xl font-light tracking-tight'
               aria-label='Current Operand'
             >
-              <MathDisplay expression={state.expression} />
+              <MathDisplay expression={state.expression} angle={state.angle} />
             </div>
           </div>
         </div>
