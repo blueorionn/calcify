@@ -182,13 +182,16 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.ADD_CONSTANT](state, action) {
-    if (action.payload === 'pi') {
-      if (state.expression === '0') return { ...state, expression: `${pi}` }
-    }
-    if (action.payload === 'e') {
-      if (state.expression === '0') return { ...state, expression: `${e}` }
-    }
-    return state
+    const constant =
+      action.payload === 'pi' ? 'pi' : action.payload === 'e' ? 'e' : null
+    if (!constant) return state
+
+    if (state.overwrite || state.expression === '0')
+      return { ...state, expression: constant, overwrite: false }
+    if (state.expression.endsWith(' '))
+      return { ...state, expression: state.expression + constant }
+
+    return { ...state, expression: `${state.expression} * ${constant}` }
   },
 
   [ACTIONS.EXPONENTIAL](state, action) {
