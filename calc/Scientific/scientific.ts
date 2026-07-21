@@ -1,6 +1,7 @@
 import { evaluate, round, pi, e } from 'mathjs'
 
 interface STATE_TYPE {
+  error: string | null
   angle: 'deg' | 'rad'
   expression: string
   previousAnswer: string
@@ -10,6 +11,7 @@ interface STATE_TYPE {
 }
 
 export const INITIAL_STATE: STATE_TYPE = {
+  error: null,
   angle: 'deg',
   expression: '0',
   previousAnswer: '0',
@@ -41,6 +43,17 @@ export const ACTIONS = {
 export type ACTION_TYPE = {
   type: string
   payload?: string
+}
+
+/** Returns true when every `(` has a matching `)` and no `)` appears before its `(`. */
+function areParensBalanced(expr: string): boolean {
+  let depth = 0
+  for (const ch of expr) {
+    if (ch === '(') depth++
+    if (ch === ')') depth--
+    if (depth < 0) return false
+  }
+  return depth === 0
 }
 
 type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
@@ -82,6 +95,10 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.EVALUATE](state) {
+    if (!areParensBalanced(state.expression)){
+      return {...state, error: 'Mismatched parentheses — check your ( and ) count.'}
+    }
+
     try {
       const result = evaluate(state.expression)
       const str = String(round(result, 10))
@@ -90,10 +107,10 @@ const handlers: Record<string, Handler> = {
         expression: str,
         previousAnswer: str,
         overwrite: true,
+        error: null
       }
     } catch {
-      console.error('Evaluate Error')
-      return state
+      return {...state, error: 'Could not evaluate the expression.'}
     }
   },
 
@@ -245,5 +262,14 @@ const handlers: Record<string, Handler> = {
 
 export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
   const handler = handlers[action.type]
-  return handler ? handler(state, action) : state
+  if (!handler) return state
+
+  const next = handler(state, action)
+
+  // Only EVALUATE is allowed to set or preserve an error.
+  // Every other action clears any stale error automatically.
+  if (action.type !== ACTIONS.EVALUATE && next.error) {
+    return { ...next, error: null }
+  }
+  return next
 }

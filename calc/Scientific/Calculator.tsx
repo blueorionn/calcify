@@ -18,6 +18,7 @@ import {
   ClearButton,
   EvaluateButton,
 } from './components/Button'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 export default function ScientificCalculator() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
@@ -67,6 +68,13 @@ export default function ScientificCalculator() {
       >
         {/* LCD Display */}
         <div className='mb-2 w-full overflow-hidden'>
+          <div>
+            {state.error && (
+              <Alert variant='destructive' className='mx-4 mb-1 rounded-none border-0 border-b px-3 py-1.5'>
+                <AlertDescription>{state.error}</AlertDescription>
+              </Alert>
+            )}
+          </div>
           <div className='p-4 text-right'>
             <div
               className='text-foreground py-1 text-xl font-light tracking-tight'
