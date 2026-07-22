@@ -37,7 +37,6 @@ export const ACTIONS = {
   FACTORIAL: 'factorial',
   PLUSMINUS: 'plusminus',
   ABSOLUTE: 'absolute',
-  ANSWER: 'answer',
 }
 
 export type ACTION_TYPE = {
@@ -303,17 +302,6 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.ABSOLUTE](state) {
     const expr = `abs(${state.expression})`
     return { ...state, expression: expr }
-  },
-
-  [ACTIONS.ANSWER](state) {
-    const expr = state.overwrite
-      ? state.previousAnswer
-      : state.expression + state.previousAnswer
-    return {
-      ...state,
-      expression: expr,
-      overwrite: false,
-    }
   },
 
   [ACTIONS.ADD_CONSTANT](state, action) {
