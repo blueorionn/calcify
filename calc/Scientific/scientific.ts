@@ -194,22 +194,39 @@ function smartBackspace(expr: string): string {
   return expr.slice(0, -1) || '0'
 }
 
+/** Returns true when the last number in `expr` already contains a decimal point. */
+function lastNumberHasDecimal(expr: string): boolean {
+  let i = expr.length - 1
+  // Walk backwards past trailing digits
+  while (i >= 0 && /[0-9]/.test(expr[i])) i--
+  // If the character before the digits is '.', the number already has a decimal
+  return i >= 0 && expr[i] === '.'
+}
+
 type Handler = (state: STATE_TYPE, action: ACTION_TYPE) => STATE_TYPE
 
 const handlers: Record<string, Handler> = {
   [ACTIONS.ADD_DIGIT](state, action) {
+    const payload = action.payload ?? '0'
+
     if (state.overwrite) {
-      const expr = action.payload ?? '0'
+      // After evaluation, start fresh; '.' alone becomes '0.'
       return {
         ...state,
-        expression: expr,
+        expression: payload === '.' ? '0.' : payload,
         overwrite: false,
       }
     }
+
+    // Prevent multiple decimal points in the same number
+    if (payload === '.' && lastNumberHasDecimal(state.expression)) {
+      return state
+    }
+
     const expr =
-      state.expression === '0' && action.payload !== '.'
-        ? (action.payload ?? '0')
-        : state.expression + (action.payload ?? '')
+      state.expression === '0' && payload !== '.'
+        ? payload
+        : state.expression + payload
     return { ...state, expression: expr }
   },
 
