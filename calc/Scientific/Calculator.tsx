@@ -1,7 +1,7 @@
 'use client'
 import { useReducer, useEffect } from 'react'
 import { INITIAL_STATE, ACTIONS, reducer } from './scientific'
-import { MathDisplay } from '@/lib/mathDisplay'
+import { MathDisplay } from '@/calc/Scientific/lib/mathDisplay'
 import {
   AngleButton,
   DigitButton,
