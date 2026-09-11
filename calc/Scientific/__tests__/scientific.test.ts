@@ -131,6 +131,45 @@ describe('CHOOSE_OPERATION', () => {
     s = reducer(s, D('2'))
     expect(s.expression).toBe('5 + 3 * 2')
   })
+
+  it('inserts unary minus instead of binary on fresh expression', () => {
+    const s = reducer(INITIAL_STATE, OP('-'))
+    expect(s.expression).toBe('-')
+  })
+
+  it('inserts unary minus after an operator', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('*'))
+    s = reducer(s, OP('-'))
+    expect(s.expression).toBe('5 * -')
+  })
+
+  it('inserts unary minus after an opening paren', () => {
+    let s = reducer(INITIAL_STATE, TRIG('sin'))
+    s = reducer(s, OP('-'))
+    expect(s.expression).toBe('sin(-')
+  })
+
+  it('starts a fresh unary minus after evaluate', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('+'))
+    s = reducer(s, D('3'))
+    s = reducer(s, EV()) // 8, overwrite = true
+    s = reducer(s, OP('-'))
+    expect(s.expression).toBe('-')
+    s = reducer(s, D('8'))
+    s = reducer(s, EV())
+    expect(s.expression).toBe('-8')
+  })
+
+  it('evaluates 5 * -3 = -15', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('*'))
+    s = reducer(s, OP('-'))
+    s = reducer(s, D('3'))
+    s = reducer(s, EV())
+    expect(s.expression).toBe('-15')
+  })
 })
 
 /* ------------------------------------------------------------------ */

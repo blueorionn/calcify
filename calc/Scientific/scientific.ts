@@ -80,6 +80,21 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.CHOOSE_OPERATION](state, action) {
+    const unaryMinus =
+      action.payload === '-' &&
+      (state.overwrite ||
+        state.expression === '0' ||
+        state.expression.endsWith(' ') ||
+        state.expression.endsWith('('))
+
+    if (unaryMinus) {
+      const expr =
+        state.overwrite || state.expression === '0'
+          ? '-'
+          : state.expression + '-'
+      return { ...state, expression: expr, overwrite: false }
+    }
+
     const expr = `${state.expression} ${action.payload} `
     return { ...state, expression: expr, overwrite: false }
   },
