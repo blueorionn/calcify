@@ -1,29 +1,29 @@
 import { describe, it, expect } from 'vitest'
 import { reducer, INITIAL_STATE, ACTIONS } from '../scientific'
 
-const D = (d: string) => ({ type: ACTIONS.ADD_DIGIT, payload: d } as const)
+const D = (d: string) => ({ type: ACTIONS.ADD_DIGIT, payload: d }) as const
 const OP = (op: string) =>
-  ({ type: ACTIONS.CHOOSE_OPERATION, payload: op } as const)
-const EV = () => ({ type: ACTIONS.EVALUATE } as const)
-const CL = () => ({ type: ACTIONS.CLEAR } as const)
-const DEL = () => ({ type: ACTIONS.DELETE } as const)
+  ({ type: ACTIONS.CHOOSE_OPERATION, payload: op }) as const
+const EV = () => ({ type: ACTIONS.EVALUATE }) as const
+const CL = () => ({ type: ACTIONS.CLEAR }) as const
+const DEL = () => ({ type: ACTIONS.DELETE }) as const
 const TRIG = (t: 'sin' | 'cos' | 'tan') =>
-  ({ type: ACTIONS.TRIG_OPERATION, payload: t } as const)
+  ({ type: ACTIONS.TRIG_OPERATION, payload: t }) as const
 const EXP = (e: 'square' | 'cube' | 'XY') =>
-  ({ type: ACTIONS.EXPONENTIAL, payload: e } as const)
+  ({ type: ACTIONS.EXPONENTIAL, payload: e }) as const
 const LOG = (l: 'log' | 'ln') =>
-  ({ type: ACTIONS.LOG_OPERATION, payload: l } as const)
+  ({ type: ACTIONS.LOG_OPERATION, payload: l }) as const
 const PAREN = (p: '(' | ')') =>
-  ({ type: ACTIONS.PARENTHESES, payload: p } as const)
+  ({ type: ACTIONS.PARENTHESES, payload: p }) as const
 const MEM = (m: string) =>
-  ({ type: ACTIONS.MEMORY_OPERATION, payload: m } as const)
+  ({ type: ACTIONS.MEMORY_OPERATION, payload: m }) as const
 const CONST = (c: 'pi' | 'e') =>
-  ({ type: ACTIONS.ADD_CONSTANT, payload: c } as const)
-const INV = () => ({ type: ACTIONS.INVERSE } as const)
-const ANG = () => ({ type: ACTIONS.CHANGE_ANGLE } as const)
-const PM = () => ({ type: ACTIONS.PLUSMINUS } as const)
-const ABS = () => ({ type: ACTIONS.ABSOLUTE } as const)
-const FACT = () => ({ type: ACTIONS.FACTORIAL } as const)
+  ({ type: ACTIONS.ADD_CONSTANT, payload: c }) as const
+const INV = () => ({ type: ACTIONS.INVERSE }) as const
+const ANG = () => ({ type: ACTIONS.CHANGE_ANGLE }) as const
+const PM = () => ({ type: ACTIONS.PLUSMINUS }) as const
+const ABS = () => ({ type: ACTIONS.ABSOLUTE }) as const
+const FACT = () => ({ type: ACTIONS.FACTORIAL }) as const
 
 /* ------------------------------------------------------------------ */
 /*  ADD_DIGIT                                                         */
@@ -131,6 +131,45 @@ describe('CHOOSE_OPERATION', () => {
     s = reducer(s, D('2'))
     expect(s.expression).toBe('5 + 3 * 2')
   })
+
+  it('inserts unary minus instead of binary on fresh expression', () => {
+    const s = reducer(INITIAL_STATE, OP('-'))
+    expect(s.expression).toBe('-')
+  })
+
+  it('inserts unary minus after an operator', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('*'))
+    s = reducer(s, OP('-'))
+    expect(s.expression).toBe('5 * -')
+  })
+
+  it('inserts unary minus after an opening paren', () => {
+    let s = reducer(INITIAL_STATE, TRIG('sin'))
+    s = reducer(s, OP('-'))
+    expect(s.expression).toBe('sin(-')
+  })
+
+  it('starts a fresh unary minus after evaluate', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('+'))
+    s = reducer(s, D('3'))
+    s = reducer(s, EV()) // 8, overwrite = true
+    s = reducer(s, OP('-'))
+    expect(s.expression).toBe('-')
+    s = reducer(s, D('8'))
+    s = reducer(s, EV())
+    expect(s.expression).toBe('-8')
+  })
+
+  it('evaluates 5 * -3 = -15', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('*'))
+    s = reducer(s, OP('-'))
+    s = reducer(s, D('3'))
+    s = reducer(s, EV())
+    expect(s.expression).toBe('-15')
+  })
 })
 
 /* ------------------------------------------------------------------ */
@@ -198,8 +237,8 @@ describe('EVALUATE', () => {
     s = reducer(s, OP('+'))
     s = reducer(s, D('3'))
     s = reducer(s, EV())
-    expect(s.expression).toBe('5')
-    expect(s.previousAnswer).toBe('5')
+    expect(s.expression).toBe('8')
+    expect(s.previousAnswer).toBe('8')
     expect(s.overwrite).toBe(true)
   })
 
@@ -243,9 +282,7 @@ describe('EVALUATE', () => {
     s = reducer(s, OP('+'))
     s = reducer(s, D('3'))
     s = reducer(s, EV())
-    expect(s.error).toBe(
-      'Mismatched parentheses — check your ( and ) count.',
-    )
+    expect(s.error).toBe('Mismatched parentheses — check your ( and ) count.')
     expect(s.expression).toBe('(5 + 3') // unchanged
   })
 
@@ -253,9 +290,7 @@ describe('EVALUATE', () => {
     let s = reducer(INITIAL_STATE, D('5'))
     s = reducer(s, PAREN(')'))
     s = reducer(s, EV())
-    expect(s.error).toBe(
-      'Mismatched parentheses — check your ( and ) count.',
-    )
+    expect(s.error).toBe('Mismatched parentheses — check your ( and ) count.')
   })
 
   it('evaluates with balanced parentheses', () => {
