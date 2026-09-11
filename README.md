@@ -7,7 +7,7 @@ A fast, clean, responsive calculator built with **Next.js 16**, **React 19**, **
 | Calculator                                    | Status    |
 | --------------------------------------------- | --------- |
 | **Basic** (arithmetic + memory)               | ✅ Live   |
-| **Scientific** (trig, log, sqrt, etc.)        | 🔜 Coming |
+| **Scientific** (trig, log, sqrt, etc.)        | ✅ Live   |
 | **Graph** (plot equations)                    | 🔜 Coming |
 | **BMI** (body mass index)                     | ✅ Live   |
 | **Currency Conversion** (live exchange rates) | ✅ Live   |
