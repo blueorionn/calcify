@@ -2,6 +2,7 @@ import { evaluate, round } from 'mathjs'
 import {
   areParensBalanced,
   convertDegreeTrig,
+  convertLogFunctions,
   smartBackspace,
   toggleLastNumber,
   lastNumberHasDecimal,
@@ -104,7 +105,7 @@ const handlers: Record<string, Handler> = {
         state.angle === 'deg'
           ? convertDegreeTrig(state.expression)
           : state.expression
-      const result = evaluate(expr)
+      const result = evaluate(convertLogFunctions(expr))
       const str = String(round(result, 10))
       return {
         ...state,

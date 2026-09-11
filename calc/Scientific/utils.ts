@@ -61,6 +61,13 @@ export function convertDegreeTrig(expr: string): string {
   return result
 }
 
+/** Rewrite log-button output to mathjs function names: log( → log10(, ln( → log(.
+ *  mathjs `log` is the NATURAL log and has no `ln`. Order matters: `log(` must
+ *  be rewritten first, or the `ln(` → `log(` result would be rewritten twice. */
+export function convertLogFunctions(expr: string): string {
+  return expr.replaceAll('log(', 'log10(').replaceAll('ln(', 'log(')
+}
+
 /** Smart backspace — removes the last logical component instead of one character.
  *  Stops when expression is '0'. */
 export function smartBackspace(expr: string): string {
