@@ -198,8 +198,8 @@ describe('EVALUATE', () => {
     s = reducer(s, OP('+'))
     s = reducer(s, D('3'))
     s = reducer(s, EV())
-    expect(s.expression).toBe('5')
-    expect(s.previousAnswer).toBe('5')
+    expect(s.expression).toBe('8')
+    expect(s.previousAnswer).toBe('8')
     expect(s.overwrite).toBe(true)
   })
 
