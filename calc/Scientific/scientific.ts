@@ -75,12 +75,12 @@ const handlers: Record<string, Handler> = {
       state.expression === '0' && payload !== '.'
         ? payload
         : state.expression + payload
-    return { ...state, expression: expr }
+    return { ...state, expression: expr, overwrite: false }
   },
 
   [ACTIONS.CHOOSE_OPERATION](state, action) {
     const expr = `${state.expression} ${action.payload} `
-    return { ...state, expression: expr }
+    return { ...state, expression: expr, overwrite: false }
   },
 
   [ACTIONS.CHANGE_ANGLE](state) {
@@ -155,18 +155,18 @@ const handlers: Record<string, Handler> = {
 
   [ACTIONS.FACTORIAL](state) {
     const expr = `${state.expression}!`
-    return { ...state, expression: expr }
+    return { ...state, expression: expr, overwrite: false }
   },
 
   [ACTIONS.PLUSMINUS](state) {
     const expr = toggleLastNumber(state.expression)
     if (!expr) return state
-    return { ...state, expression: expr }
+    return { ...state, expression: expr, overwrite: false }
   },
 
   [ACTIONS.ABSOLUTE](state) {
     const expr = `abs(${state.expression})`
-    return { ...state, expression: expr }
+    return { ...state, expression: expr, overwrite: false }
   },
 
   [ACTIONS.ADD_CONSTANT](state, action) {
@@ -187,19 +187,19 @@ const handlers: Record<string, Handler> = {
       const expr = state.inverse
         ? `sqrt(${state.expression})`
         : `${state.expression}^2`
-      return { ...state, expression: expr }
+      return { ...state, expression: expr, overwrite: false }
     }
     if (action.payload === 'cube') {
       const expr = state.inverse
         ? `cbrt(${state.expression})`
         : `${state.expression}^3`
-      return { ...state, expression: expr }
+      return { ...state, expression: expr, overwrite: false }
     }
     if (action.payload === 'XY') {
       const expr = state.inverse
         ? `${state.expression}^(1/`
         : `${state.expression}^`
-      return { ...state, expression: expr }
+      return { ...state, expression: expr, overwrite: false }
     }
     return state
   },
@@ -209,20 +209,20 @@ const handlers: Record<string, Handler> = {
       const expr = state.inverse
         ? `10^(${state.expression})`
         : `log(${state.expression})`
-      return { ...state, expression: expr }
+      return { ...state, expression: expr, overwrite: false }
     }
     if (action.payload === 'ln') {
       const expr = state.inverse
         ? `e^(${state.expression})`
         : `ln(${state.expression})`
-      return { ...state, expression: expr }
+      return { ...state, expression: expr, overwrite: false }
     }
     return state
   },
 
   [ACTIONS.PARENTHESES](state, action) {
     const expr = `${state.expression}${action.payload}`
-    return { ...state, expression: expr }
+    return { ...state, expression: expr, overwrite: false }
   },
 
   [ACTIONS.TRIG_OPERATION](state, action) {
