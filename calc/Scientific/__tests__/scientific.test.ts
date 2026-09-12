@@ -286,11 +286,12 @@ describe('EVALUATE', () => {
     expect(s.expression).toBe('(5 + 3') // unchanged
   })
 
-  it('sets error on unbalanced closing paren', () => {
+  it('evaluates cleanly when stray closing paren was ignored', () => {
     let s = reducer(INITIAL_STATE, D('5'))
-    s = reducer(s, PAREN(')'))
+    s = reducer(s, PAREN(')')) // blocked — no unclosed (
     s = reducer(s, EV())
-    expect(s.error).toBe('Mismatched parentheses — check your ( and ) count.')
+    expect(s.error).toBeNull()
+    expect(s.expression).toBe('5')
   })
 
   it('evaluates with balanced parentheses', () => {
@@ -845,9 +846,33 @@ describe('ADD_CONSTANT', () => {
 /*  PARENTHESES                                                       */
 /* ------------------------------------------------------------------ */
 describe('PARENTHESES', () => {
-  it('appends opening paren', () => {
+  it('replaces initial 0 with opening paren', () => {
     const s = reducer(INITIAL_STATE, PAREN('('))
-    expect(s.expression).toBe('0(')
+    expect(s.expression).toBe('(')
+  })
+
+  it('starts fresh with opening paren after evaluate', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('+'))
+    s = reducer(s, D('3'))
+    s = reducer(s, EV()) // 8, overwrite = true
+    s = reducer(s, PAREN('('))
+    expect(s.expression).toBe('(')
+  })
+
+  it('ignores closing paren on balanced expression', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, PAREN(')'))
+    expect(s.expression).toBe('5')
+  })
+
+  it('ignores closing paren after evaluate', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('+'))
+    s = reducer(s, D('3'))
+    s = reducer(s, EV()) // 8, overwrite = true
+    s = reducer(s, PAREN(')'))
+    expect(s.expression).toBe('8')
   })
 
   it('appends closing paren', () => {

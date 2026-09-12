@@ -237,8 +237,18 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.PARENTHESES](state, action) {
-    const expr = `${state.expression}${action.payload}`
-    return { ...state, expression: expr, overwrite: false }
+    const fresh = state.expression === '0' || state.overwrite
+
+    if (action.payload === '(')
+      return {
+        ...state,
+        expression: fresh ? '(' : state.expression + '(',
+        overwrite: false,
+      }
+
+    if (fresh || areParensBalanced(state.expression)) return state
+
+    return { ...state, expression: state.expression + ')', overwrite: false }
   },
 
   [ACTIONS.TRIG_OPERATION](state, action) {
