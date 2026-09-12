@@ -103,8 +103,8 @@ const handlers: Record<string, Handler> = {
     return { ...state, angle: state.angle === 'deg' ? 'rad' : 'deg' }
   },
 
-  [ACTIONS.CLEAR]() {
-    return INITIAL_STATE
+  [ACTIONS.CLEAR](state) {
+    return { ...INITIAL_STATE, memory: state.memory }
   },
 
   [ACTIONS.EVALUATE](state) {

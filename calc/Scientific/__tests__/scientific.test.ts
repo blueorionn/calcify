@@ -592,6 +592,18 @@ describe('CLEAR', () => {
     s = reducer(s, CL())
     expect(s.error).toBeNull()
   })
+
+  it('preserves memory on AC', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, MEM('M+'))
+    expect(s.memory).toBe('5')
+    s = reducer(s, CL())
+    expect(s.memory).toBe('5')
+    expect(s.expression).toBe('0')
+    // MC is what clears memory, not AC
+    s = reducer(s, MEM('MC'))
+    expect(s.memory).toBe('0')
+  })
 })
 
 /* ------------------------------------------------------------------ */
