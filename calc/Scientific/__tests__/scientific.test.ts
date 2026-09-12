@@ -472,6 +472,30 @@ describe('DELETE', () => {
     expect(s2.expression).toBe('0')
   })
 
+  it('removes "asin(" in one backspace', () => {
+    let s = reducer(INITIAL_STATE, INV())
+    s = reducer(s, TRIG('sin'))
+    expect(s.expression).toBe('asin(')
+    s = reducer(s, DEL())
+    expect(s.expression).toBe('0')
+  })
+
+  it('removes "acos(" in one backspace', () => {
+    let s = reducer(INITIAL_STATE, INV())
+    s = reducer(s, TRIG('cos'))
+    expect(s.expression).toBe('acos(')
+    s = reducer(s, DEL())
+    expect(s.expression).toBe('0')
+  })
+
+  it('removes "atan(" in one backspace', () => {
+    let s = reducer(INITIAL_STATE, INV())
+    s = reducer(s, TRIG('tan'))
+    expect(s.expression).toBe('atan(')
+    s = reducer(s, DEL())
+    expect(s.expression).toBe('0')
+  })
+
   it('removes "log(" in one backspace', () => {
     let s = reducer(INITIAL_STATE, LOG('log'))
     s = reducer(s, DEL())

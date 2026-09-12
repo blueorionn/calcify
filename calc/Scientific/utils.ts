@@ -78,12 +78,12 @@ export function smartBackspace(expr: string): string {
 
   // Function prefix ending with '(' : "sin(", "cos(", "log(", etc.
   const FUNCTIONS = [
-    'sin(',
-    'cos(',
-    'tan(',
     'asin(',
     'acos(',
     'atan(',
+    'sin(',
+    'cos(',
+    'tan(',
     'log(',
     'ln(',
     'sqrt(',
