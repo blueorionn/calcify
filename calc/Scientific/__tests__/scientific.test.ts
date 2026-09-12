@@ -840,6 +840,25 @@ describe('ADD_CONSTANT', () => {
     expect(s.expression).toBe('pi')
     expect(s.overwrite).toBe(false)
   })
+
+  it('inserts constant bare after a function prefix', () => {
+    let s = reducer(INITIAL_STATE, TRIG('sin'))
+    s = reducer(s, CONST('pi'))
+    expect(s.expression).toBe('sin(pi')
+  })
+
+  it('inserts constant bare after ^', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, EXP('XY')) // "5^"
+    s = reducer(s, CONST('pi'))
+    expect(s.expression).toBe('5^pi')
+  })
+
+  it('inserts constant bare after a dangling unary minus', () => {
+    let s = reducer(INITIAL_STATE, OP('-')) // "-"
+    s = reducer(s, CONST('pi'))
+    expect(s.expression).toBe('-pi')
+  })
 })
 
 /* ------------------------------------------------------------------ */

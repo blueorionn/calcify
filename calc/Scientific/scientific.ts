@@ -192,7 +192,12 @@ const handlers: Record<string, Handler> = {
 
     if (state.overwrite || state.expression === '0')
       return { ...state, expression: constant, overwrite: false }
-    if (state.expression.endsWith(' '))
+    if (
+      state.expression.endsWith(' ') ||
+      state.expression.endsWith('(') ||
+      state.expression.endsWith('^') ||
+      state.expression.endsWith('-')
+    )
       return { ...state, expression: state.expression + constant }
 
     return { ...state, expression: `${state.expression} * ${constant}` }
