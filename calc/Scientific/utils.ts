@@ -1,3 +1,5 @@
+import { evaluate } from 'mathjs'
+
 /** Returns true when every `(` has a matching `)` and no `)` appears before its `(`. */
 export function areParensBalanced(expr: string): boolean {
   let depth = 0
@@ -162,4 +164,16 @@ export function lastNumberHasDecimal(expr: string): boolean {
   let i = expr.length - 1
   while (i >= 0 && /[0-9]/.test(expr[i])) i--
   return i >= 0 && expr[i] === '.'
+}
+
+/** Evaluate an expression without side effects.
+ *  Returns null when the expression is invalid or incomplete. */
+export function tryEvaluate(expr: string, angle: 'deg' | 'rad'): number | null {
+  if (!areParensBalanced(expr)) return null
+  try {
+    const e = angle === 'deg' ? convertDegreeTrig(expr) : expr
+    return evaluate(convertLogFunctions(e))
+  } catch {
+    return null
+  }
 }

@@ -998,6 +998,31 @@ describe('MEMORY_OPERATION', () => {
     let s = reducer(INITIAL_STATE, TRIG('sin'))
     s = reducer(s, MEM('M+'))
     expect(s.memory).toBe('0')
+    expect(s.error).toBeTruthy()
+  })
+
+  it('M+ evaluates the full expression, not just the leading number', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, OP('+'))
+    s = reducer(s, D('3'))
+    s = reducer(s, MEM('M+'))
+    expect(s.memory).toBe('8')
+  })
+
+  it('M+ evaluates trig expressions in degree mode', () => {
+    let s = reducer(INITIAL_STATE, TRIG('sin'))
+    s = reducer(s, D('4'))
+    s = reducer(s, D('5'))
+    s = reducer(s, PAREN(')'))
+    s = reducer(s, MEM('M+'))
+    expect(parseFloat(s.memory)).toBeCloseTo(0.7071067812, 8)
+  })
+
+  it('M+ sets error on incomplete expression', () => {
+    let s = reducer(INITIAL_STATE, TRIG('sin'))
+    s = reducer(s, MEM('M+'))
+    expect(s.memory).toBe('0')
+    expect(s.error).toBe('Cannot store this expression in memory.')
   })
 })
 

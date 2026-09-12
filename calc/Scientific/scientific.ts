@@ -6,6 +6,7 @@ import {
   smartBackspace,
   toggleLastNumber,
   lastNumberHasDecimal,
+  tryEvaluate,
 } from './utils'
 
 interface STATE_TYPE {
@@ -139,31 +140,33 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.MEMORY_OPERATION](state, action) {
-    if (action.payload === 'MC') return { ...state, memory: '0' }
+    if (action.payload === 'MC') return { ...state, memory: '0', error: null }
     if (action.payload === 'MR')
       return {
         ...state,
         expression: state.memory,
         overwrite: true,
+        error: null,
       }
 
-    const current = parseFloat(state.expression)
-    if (!current || current === 0) return state
+    if (action.payload === 'M+' || action.payload === 'M-') {
+      const current = tryEvaluate(state.expression, state.angle)
+      if (current === null)
+        return { ...state, error: 'Cannot store this expression in memory.' }
+      if (current === 0) return state
 
-    if (action.payload === 'M+') {
       const newMem =
         state.memory === '0'
-          ? String(current)
-          : String(round(evaluate(`${state.memory} + ${current}`), 10))
-      return { ...state, memory: newMem }
-    }
-
-    if (action.payload === 'M-') {
-      const newMem =
-        state.memory === '0'
-          ? String(current)
-          : String(round(evaluate(`${state.memory} - ${current}`), 10))
-      return { ...state, memory: newMem }
+          ? String(round(current, 10))
+          : String(
+              round(
+                evaluate(
+                  `${state.memory} ${action.payload === 'M+' ? '+' : '-'} ${current}`
+                ),
+                10
+              )
+            )
+      return { ...state, memory: newMem, error: null }
     }
 
     return state
@@ -293,8 +296,13 @@ export function reducer(state: STATE_TYPE, action: ACTION_TYPE): STATE_TYPE {
 
   let next = handler(state, action)
 
-  // Only EVALUATE preserves error; every other action clears it
-  if (action.type !== ACTIONS.EVALUATE && next.error) {
+  // Only EVALUATE and MEMORY_OPERATION preserve their own errors;
+  // every other action clears them
+  if (
+    action.type !== ACTIONS.EVALUATE &&
+    action.type !== ACTIONS.MEMORY_OPERATION &&
+    next.error
+  ) {
     next = { ...next, error: null }
   }
 
