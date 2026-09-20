@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <FloatingNav />
+      <FloatingNav name='Scientific' />
       <main className='bg-muted dark:bg-background h-full w-full pb-12'>
         <section
           className={`${shareTechMono.className} flex h-full w-full items-center justify-center p-4`}
