@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Sun, Moon } from 'lucide-react'
 import { useThemeProvider } from '@/context/ThemeContext'
 import { Button } from '@/components/ui/button'
+import { spaceGrotesk } from '@/lib/fonts'
 import Logo from '@/public/icons/icon.png'
 
 export default function Header() {
@@ -24,12 +25,14 @@ export default function Header() {
               width={24}
               className='aspect-auto h-8 w-8'
             />
-            <h1 className='text-foreground text-xl font-bold lg:text-2xl'>
+            <h1
+              className={`${spaceGrotesk.className} text-foreground text-xl font-bold tracking-tight lg:text-2xl`}
+            >
               Calcify
             </h1>
           </Link>
         </div>
-        <div className='flex w-max items-center justify-center gap-2.5'>
+        <div className='flex w-max items-center justify-center gap-1.5'>
           <Button
             variant='ghost'
             size='icon'
@@ -38,9 +41,9 @@ export default function Header() {
             className='cursor-pointer'
           >
             {theme === 'dark' ? (
-              <Sun className='h-6 w-6' />
+              <Sun className='size-5' />
             ) : (
-              <Moon className='h-6 w-6' />
+              <Moon className='size-5' />
             )}
           </Button>
           <Button variant='ghost' size='icon' asChild>
