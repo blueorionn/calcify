@@ -4,7 +4,7 @@ import ArithmeticCalculator from '@/calc/Arithmetic/Calculator'
 import { shareTechMono } from '@/lib/fonts'
 
 export const metadata: Metadata = {
-  title: 'Basic Calculator | Calcify',
+  title: 'Arithmetic Calculator | Calcify',
 }
 
 export default function Page() {

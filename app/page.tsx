@@ -24,8 +24,8 @@ interface App {
 
 const APPS: App[] = [
   {
-    title: 'Basic',
-    href: '/basic',
+    title: 'Arithmetic',
+    href: '/arithmetic',
     icon: Calculator,
     description:
       'Everyday arithmetic with memory keys, backspace and full keyboard support.',
