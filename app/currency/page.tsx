@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Header from '@/components/Header'
+import FloatingNav from '@/components/FloatingNav'
 import CurrencyConversion from '@/calc/Currency/CurrencyConversion'
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <Header />
+      <FloatingNav />
       <main className='bg-muted dark:bg-background h-full w-full pb-12'>
         <section
           className={`flex h-full w-full flex-col items-center justify-center p-4`}
