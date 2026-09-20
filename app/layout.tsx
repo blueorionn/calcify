@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 const TITLE = 'Calcify - Simple Calculator'
 const DESCRIPTION =
-  'A fast, clean, and responsive calculator for everyday arithmetic calculations.'
+  'A growing suite of fast, clean calculators — basic, scientific, graph, BMI and currency — running right in your browser.'
 
 export const metadata: Metadata = {
   title: TITLE,

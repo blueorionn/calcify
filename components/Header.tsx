@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Sun, Moon, Grip } from 'lucide-react'
+import { Sun, Moon } from 'lucide-react'
 import { useThemeProvider } from '@/context/ThemeContext'
 import { Button } from '@/components/ui/button'
 import Logo from '@/public/icons/icon.png'
@@ -10,7 +10,7 @@ export default function Header() {
   const { theme, setTheme } = useThemeProvider()
 
   return (
-    <header className='bg-secondary dark:bg-card relative z-100 h-max w-full'>
+    <header className='bg-muted dark:bg-background relative z-100 h-max w-full'>
       <nav className='mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 md:py-6 lg:px-0'>
         <div className='w-max'>
           <Link
@@ -30,9 +30,6 @@ export default function Header() {
           </Link>
         </div>
         <div className='flex w-max items-center justify-center gap-2.5'>
-          <Link href={`/apps`}>
-            <Grip className='h-5 w-5' />
-          </Link>
           <Button
             variant='ghost'
             size='icon'
