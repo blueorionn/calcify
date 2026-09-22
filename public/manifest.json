@@ -1,11 +1,13 @@
 {
   "name": "Calcify",
   "short_name": "Calcify",
-  "description": "A fast, clean calculator app",
+  "description": "A growing suite of fast, clean calculators — basic, scientific, graph, BMI and currency — running right in your browser.",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
+  "background_color": "#040406",
+  "theme_color": "#040406",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icons/android-chrome-192x192.png",
@@ -15,8 +17,7 @@
     {
       "src": "/icons/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }

@@ -1,5 +1,4 @@
-import type { Metadata } from 'next'
-import PwaRegister from '@/components/PwaRegister'
+import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
@@ -14,11 +13,13 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+const APP_NAME = 'Calcify'
 const TITLE = 'Calcify - Simple Calculator'
 const DESCRIPTION =
   'A growing suite of fast, clean calculators — basic, scientific, graph, BMI and currency — running right in your browser.'
 
 export const metadata: Metadata = {
+  applicationName: APP_NAME,
   title: TITLE,
   description: DESCRIPTION,
   manifest: '/manifest.json',
@@ -26,36 +27,33 @@ export const metadata: Metadata = {
     icon: [
       { url: '/icons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/icons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      {
-        url: '/icons/android-chrome-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        url: '/icons/android-chrome-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
       { url: '/icons/icon.svg', type: 'image/svg+xml' },
     ],
     apple: '/icons/apple-touch-icon.png',
   },
   appleWebApp: {
-    title: 'Calcify',
     capable: true,
-    statusBarStyle: 'black-translucent',
+    title: TITLE,
+    statusBarStyle: 'default',
   },
   openGraph: {
+    type: 'website',
+    siteName: APP_NAME,
     title: TITLE,
     description: DESCRIPTION,
   },
   twitter: {
+    card: 'summary',
     title: TITLE,
     description: DESCRIPTION,
   },
-  other: {
-    'theme-color': '#0a0a0a',
-  },
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
+    { media: '(prefers-color-scheme: dark)', color: '#040406' },
+  ],
 }
 
 export default function RootLayout({
@@ -69,10 +67,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className='flex min-h-full flex-col'>
-        <ThemeProvider>
-          {children}
-          <PwaRegister />
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )
