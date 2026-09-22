@@ -6,10 +6,13 @@ import {
   currencyToFlag,
   currencyLabel,
 } from '@/lib/flags'
+import OfflineNotice from '@/components/pages/OfflineNotice'
 import type { CurrencyEntry } from '@/lib/flags'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useOnline } from '@/hooks/useOnline'
 
 export default function CurrencyConversion() {
+  const online = useOnline()
   const [amount, setAmount] = useState('')
   const [fromCurrency, setFromCurrency] = useState('USD')
   const [toCurrency, setToCurrency] = useState('EUR')
@@ -113,6 +116,8 @@ export default function CurrencyConversion() {
 
   const fromFlag = currencyToFlag(fromCurrency)
   const toFlag = currencyToFlag(toCurrency)
+
+  if (!online) return <OfflineNotice />
 
   return (
     <>
