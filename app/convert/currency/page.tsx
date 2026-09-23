@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import FloatingNav from '@/components/FloatingNav'
-import CurrencyConversion from '@/calc/Currency/CurrencyConversion'
+import CurrencyConversion from '@/calc/Conversion/Currency/CurrencyConversion'
 
 export const metadata: Metadata = {
   title: 'Currency Conversion | Calcify',
