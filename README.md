@@ -30,11 +30,17 @@ and **mathjs**, installable as a PWA.
 | **Scientific** (trig, log, powers, factorial) | ✅ Live   |
 | **Graph** (plot equations)                    | 🔜 Coming |
 | **BMI** (body mass index)                     | ✅ Live   |
-| **Currency Conversion** (live exchange rates) | ✅ Live   |
-| **Weight Conversion** (kg, lb, oz, …)         | 🔜 Coming |
-| **Energy Conversion** (J, cal, kWh, …)        | 🔜 Coming |
-| **Speed Conversion** (km/h, mph, kn, …)       | 🔜 Coming |
 | _More to be announced_                        | —         |
+
+## Converters
+
+| Converter                            | Status    |
+| ------------------------------------ | --------- |
+| **Currency** (live exchange rates)   | ✅ Live   |
+| **Energy** (J, cal, kWh, eV, TNT, …) | ✅ Live   |
+| **Weight** (kg, lb, oz, …)           | 🔜 Coming |
+| **Speed** (km/h, mph, kn, …)         | 🔜 Coming |
+| _More to be announced_               | —         |
 
 ## Usage
 
@@ -57,11 +63,18 @@ tap instead of character by character.
 Metric or imperial units with a live result, category (underweight → obese)
 and color scale.
 
-### Currency (`/currency`)
+### Currency (`/convert/currency`)
 
 Live exchange rates from [Frankfurter](https://frankfurter.dev) (ECB reference
 rates) across ~30 currencies, with flag display, one-tap swap and debounced
 input. The only calculator that needs a connection.
+
+### Energy (`/convert/energy`)
+
+46 energy units across SI joule prefixes, calories, watt-hours,
+electronvolts, TNT equivalents, imperial and physics units — from picojoules
+to the Planck energy and the Sun's output per second. Exact conversion
+factors, live results, fully offline.
 
 ## Features
 
@@ -74,16 +87,16 @@ input. The only calculator that needs a connection.
 
 ## Tech Stack
 
-| Layer     | Technology                                                     |
-| --------- | -------------------------------------------------------------- |
-| Framework | Next.js 16 (App Router, Turbopack)                             |
-| UI        | React 19 + React Compiler, shadcn/ui (radix-nova)              |
-| Icons     | lucide-react                                                   |
-| Math      | mathjs (safe evaluation)                                       |
-| Styling   | Tailwind CSS v4                                                |
-| PWA       | Serwist (precaching, runtime caching, offline fallback)        |
-| Testing   | Vitest                                                         |
-| Tooling   | TypeScript · ESLint · Prettier · pnpm                          |
+| Layer     | Technology                                              |
+| --------- | ------------------------------------------------------- |
+| Framework | Next.js 16 (App Router, Turbopack)                      |
+| UI        | React 19 + React Compiler, shadcn/ui (radix-nova)       |
+| Icons     | lucide-react                                            |
+| Math      | mathjs (safe evaluation)                                |
+| Styling   | Tailwind CSS v4                                         |
+| PWA       | Serwist (precaching, runtime caching, offline fallback) |
+| Testing   | Vitest                                                  |
+| Tooling   | TypeScript · ESLint · Prettier · pnpm                   |
 
 ## License
 

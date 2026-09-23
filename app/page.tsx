@@ -1,13 +1,17 @@
 import Header from '@/components/Header'
 import Link from 'next/link'
 import {
+  ArrowLeftRight,
   ArrowUpRight,
   Calculator,
   CircleDollarSign,
+  Gauge,
+  Scale,
   Sigma,
   Sparkles,
   Tangent,
   Weight,
+  Zap,
   type LucideIcon,
 } from 'lucide-react'
 import { shareTechMono } from '@/lib/fonts'
@@ -53,12 +57,39 @@ const APPS: App[] = [
     description: 'Body mass index with a healthy-range scale for your build.',
     status: 'live',
   },
+]
+
+const CONVERTERS: App[] = [
   {
     title: 'Currency',
-    href: '/currency',
+    href: '/convert/currency',
     icon: CircleDollarSign,
     description: 'Convert between world currencies with live exchange rates.',
     status: 'live',
+  },
+  {
+    title: 'Energy',
+    href: '/convert/energy',
+    icon: Zap,
+    description:
+      'Joules, calories, kilowatt-hours, electronvolts, TNT and more — exact factors, fully offline.',
+    status: 'live',
+  },
+  {
+    title: 'Weight',
+    href: '/convert/weight',
+    icon: Scale,
+    description:
+      'Kilograms, pounds, ounces, stones and more — instant conversions.',
+    status: 'soon',
+  },
+  {
+    title: 'Speed',
+    href: '/convert/speed',
+    icon: Gauge,
+    description:
+      'Kilometres and miles per hour, knots, mach and more — instant conversions.',
+    status: 'soon',
   },
 ]
 
@@ -135,6 +166,34 @@ export default function Home() {
               </h2>
               <p className='text-sm leading-relaxed'>
                 New calculators are added regularly — suggest one on GitHub.
+              </p>
+            </div>
+          </div>
+        </section>
+        <div className='mx-auto flex w-full max-w-5xl items-center gap-4 px-4 pt-10'>
+          <span className='bg-border h-px flex-1' />
+          <span className='text-muted-foreground font-mono text-xs font-semibold tracking-widest uppercase'>
+            Unit Conversion
+          </span>
+          <span className='bg-border h-px flex-1' />
+        </div>
+        <section
+          aria-label='Converters'
+          className='xs:grid-cols-2 mx-auto grid w-full max-w-5xl grid-cols-1 gap-4 p-4 lg:grid-cols-3'
+        >
+          {CONVERTERS.map((app) => (
+            <AppCard key={app.title} {...app} />
+          ))}
+          <div className='border-border text-muted-foreground flex flex-col gap-3 rounded border border-dashed p-6'>
+            <div className='flex size-11 items-center justify-center rounded-lg border border-dashed'>
+              <ArrowLeftRight className='size-6' />
+            </div>
+            <div className='flex flex-1 flex-col gap-2'>
+              <h2 className='font-mono text-sm font-semibold tracking-widest uppercase'>
+                More converters
+              </h2>
+              <p className='text-sm leading-relaxed'>
+                New converters are added regularly — suggest one on GitHub.
               </p>
             </div>
           </div>
