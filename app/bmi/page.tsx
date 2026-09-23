@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import FloatingNav from '@/components/FloatingNav'
-import BMICalculator from '@/calc/BMI/Calculator'
+import BMICalculator from '@/calc/bmi/Calculator'
 
 export const metadata: Metadata = {
   title: 'BMI Calculator | Calcify',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import FloatingNav from '@/components/FloatingNav'
-import ScientificCalculator from '@/calc/Scientific/Calculator'
+import ScientificCalculator from '@/calc/scientific/Calculator'
 import { shareTechMono } from '@/lib/fonts'
 
 export const metadata: Metadata = {

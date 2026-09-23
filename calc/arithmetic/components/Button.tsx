@@ -1,6 +1,6 @@
 'use client'
 import type { Dispatch } from 'react'
-import { ACTIONS, type ACTION_TYPE } from '@/calc/Arithmetic/arithmetic'
+import { ACTIONS, type ACTION_TYPE } from '@/calc/arithmetic/arithmetic'
 import { Delete } from 'lucide-react'
 
 export const operatorDisplay: Record<string, string> = {
