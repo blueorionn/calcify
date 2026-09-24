@@ -1,8 +1,8 @@
-export default function CommingSoon() {
+export default function ComingSoon() {
   return (
     <>
       <div className='flex h-full w-full items-center justify-center'>
-        <p>Comming Soon...</p>
+        <p>Coming Soon...</p>
       </div>
     </>
   )
