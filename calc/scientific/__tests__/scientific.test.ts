@@ -1121,9 +1121,6 @@ describe('End-to-end', () => {
     s = reducer(s, D('3'))
     s = reducer(s, EV()) // 8, overwrite=true
     s = reducer(s, OP('+')) // should append operator, not replace
-    // FIXME: currently CHOOSE_OPERATION doesn't reset overwrite,
-    // so the next digit will replace "8 + " with just the digit.
-    // This test documents the known bug (#1).
     s = reducer(s, D('2'))
     // BUG: expression should be "8 + 2" but is "2" due to overwrite
     expect(s.expression).toBe('8 + 2')
