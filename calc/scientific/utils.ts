@@ -12,7 +12,7 @@ export function areParensBalanced(expr: string): boolean {
 }
 
 /** Find the index of the `)` that closes the `(` at `openIdx`. Returns -1 if no match. */
-export function findParenClose(expr: string, openIdx: number): number {
+function findParenClose(expr: string, openIdx: number): number {
   if (expr[openIdx] !== '(') return -1
 
   let depth = 0
