@@ -94,14 +94,7 @@ const CONVERTERS: App[] = [
 ]
 
 function StatusBadge({ status }: { status: Status }) {
-  if (status === 'live') {
-    return (
-      <span className='inline-flex w-max items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-600 dark:text-emerald-400'>
-        <span className='size-1.5 rounded-full bg-current' />
-        Live
-      </span>
-    )
-  }
+  if (status === 'live') return null
   return (
     <span className='inline-flex w-max items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400'>
       <span className='size-1.5 rounded-full bg-current' />
