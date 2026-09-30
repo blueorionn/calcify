@@ -184,7 +184,10 @@ const handlers: Record<string, Handler> = {
   },
 
   [ACTIONS.ABSOLUTE](state) {
-    const expr = `abs(${state.expression})`
+    const expr =
+      state.expression === '0' || state.overwrite
+        ? `abs(`
+        : `${state.expression} abs(`
     return { ...state, expression: expr, overwrite: false }
   },
 
@@ -209,13 +212,17 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.EXPONENTIAL](state, action) {
     if (action.payload === 'square') {
       const expr = state.inverse
-        ? `sqrt(${state.expression})`
+        ? state.overwrite || state.expression === '0'
+          ? `sqrt(`
+          : `${state.expression}sqrt(`
         : `${state.expression}^2`
       return { ...state, expression: expr, overwrite: false }
     }
     if (action.payload === 'cube') {
       const expr = state.inverse
-        ? `cbrt(${state.expression})`
+        ? state.overwrite || state.expression === '0'
+          ? `cbrt(`
+          : `${state.expression}cbrt(`
         : `${state.expression}^3`
       return { ...state, expression: expr, overwrite: false }
     }
@@ -231,14 +238,22 @@ const handlers: Record<string, Handler> = {
   [ACTIONS.LOG_OPERATION](state, action) {
     if (action.payload === 'log') {
       const expr = state.inverse
-        ? `10^(${state.expression})`
-        : `log(${state.expression})`
+        ? state.overwrite || state.expression === '0'
+          ? `10^`
+          : `${state.expression} 10^`
+        : state.overwrite || state.expression === '0'
+          ? `log(`
+          : `${state.expression} log(`
       return { ...state, expression: expr, overwrite: false }
     }
     if (action.payload === 'ln') {
       const expr = state.inverse
-        ? `e^(${state.expression})`
-        : `ln(${state.expression})`
+        ? state.overwrite || state.expression === '0'
+          ? `e^`
+          : `${state.expression} e^`
+        : state.overwrite || state.expression === '0'
+          ? `ln(`
+          : `${state.expression} ln(`
       return { ...state, expression: expr, overwrite: false }
     }
     return state

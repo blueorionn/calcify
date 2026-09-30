@@ -510,14 +510,16 @@ describe('DELETE', () => {
   })
 
   it('removes "sqrt(" in one backspace', () => {
-    let s = reducer(INITIAL_STATE, EXP('square'))
-    s = reducer(s, INV()) // inverse → sqrt
-    s = reducer(s, EXP('square'))
-    expect(s.expression).toBe('sqrt(0')
-    s = reducer(s, DEL()) // remove the '0' first
-    expect(s.expression).toBe('sqrt(')
-    s = reducer(s, DEL()) // now remove "sqrt("
+    let s = reducer(INITIAL_STATE, INV())
+    s = reducer(s, EXP('square')) // fresh → sqrt(
+    s = reducer(s, DEL())
     expect(s.expression).toBe('0')
+    // appended prefix removes back to the operand
+    s = reducer(s, D('1'))
+    s = reducer(s, D('6'))
+    s = reducer(s, EXP('square')) // 16sqrt( (inverse still on)
+    s = reducer(s, DEL())
+    expect(s.expression).toBe('16')
   })
 
   it('removes exponent "^2" in one backspace', () => {
@@ -673,17 +675,32 @@ describe('PLUSMINUS', () => {
 /*  ABSOLUTE                                                          */
 /* ------------------------------------------------------------------ */
 describe('ABSOLUTE', () => {
-  it('wraps expression in abs()', () => {
-    const s1 = reducer(INITIAL_STATE, D('5'))
-    const s2 = reducer(s1, ABS())
-    expect(s2.expression).toBe('abs(5)')
+  it('starts a bare abs( on a fresh expression', () => {
+    const s = reducer(INITIAL_STATE, ABS())
+    expect(s.expression).toBe('abs(')
   })
 
-  it('wraps negative expression', () => {
+  it('starts a bare abs( from a result', () => {
     let s = reducer(INITIAL_STATE, D('5'))
-    s = reducer(s, PM())
+    s = reducer(s, EV()) // 5
     s = reducer(s, ABS())
-    expect(s.expression).toBe('abs(-5)')
+    expect(s.expression).toBe('abs(')
+  })
+
+  it('appends abs( prefix', () => {
+    const s1 = reducer(INITIAL_STATE, D('5'))
+    const s2 = reducer(s1, ABS())
+    expect(s2.expression).toBe('5 abs(')
+  })
+
+  it('evaluates through an appended abs( prefix', () => {
+    let s = reducer(INITIAL_STATE, D('5'))
+    s = reducer(s, ABS()) // 5 abs(
+    s = reducer(s, D('9'))
+    s = reducer(s, PM()) // 5 abs(-9
+    s = reducer(s, PAREN(')'))
+    s = reducer(s, EV())
+    expect(s.expression).toBe('45') // 5 * |−9|
   })
 })
 
@@ -709,16 +726,18 @@ describe('FACTORIAL', () => {
 /*  EXPONENTIAL                                                       */
 /* ------------------------------------------------------------------ */
 describe('EXPONENTIAL', () => {
-  it('wraps in x^2', () => {
+  it('evaluate square x^2', () => {
     const s1 = reducer(INITIAL_STATE, D('5'))
     const s2 = reducer(s1, EXP('square'))
-    expect(s2.expression).toBe('5^2')
+    const s3 = reducer(s2, PAREN(')'))
+    expect(s3.expression).toBe('5^2')
   })
 
-  it('wraps in x^3', () => {
+  it('evaluate cube x^3', () => {
     const s1 = reducer(INITIAL_STATE, D('2'))
     const s2 = reducer(s1, EXP('cube'))
-    expect(s2.expression).toBe('2^3')
+    const s3 = reducer(s2, PAREN(')'))
+    expect(s3.expression).toBe('2^3')
   })
 
   it('appends ^ for XY', () => {
@@ -727,20 +746,59 @@ describe('EXPONENTIAL', () => {
     expect(s2.expression).toBe('5^')
   })
 
-  it('wraps in sqrt in inverse mode', () => {
+  it('appends sqrt( prefix in inverse mode', () => {
     let s = reducer(INITIAL_STATE, D('1'))
     s = reducer(s, D('6'))
     s = reducer(s, INV())
     s = reducer(s, EXP('square'))
-    expect(s.expression).toBe('sqrt(16)')
+    expect(s.expression).toBe('16sqrt(')
   })
 
-  it('wraps in cbrt in inverse mode', () => {
+  it('appends cbrt( prefix in inverse mode', () => {
     let s = reducer(INITIAL_STATE, D('2'))
     s = reducer(s, D('7'))
     s = reducer(s, INV())
     s = reducer(s, EXP('cube'))
-    expect(s.expression).toBe('cbrt(27)')
+    expect(s.expression).toBe('27cbrt(')
+  })
+
+  it('starts a bare sqrt( on a fresh expression in inverse mode', () => {
+    let s = reducer(INITIAL_STATE, INV())
+    s = reducer(s, EXP('square'))
+    expect(s.expression).toBe('sqrt(')
+  })
+
+  it('starts a bare sqrt( from a result in inverse mode', () => {
+    let s = reducer(INITIAL_STATE, D('4'))
+    s = reducer(s, EXP('square'))
+    s = reducer(s, EV()) // 16
+    s = reducer(s, INV())
+    s = reducer(s, EXP('square'))
+    expect(s.expression).toBe('sqrt(')
+  })
+
+  it('keeps 0 as the base on a fresh expression', () => {
+    const s = reducer(INITIAL_STATE, EXP('square'))
+    expect(s.expression).toBe('0^2')
+  })
+
+  it('appends ^2 to a result', () => {
+    let s = reducer(INITIAL_STATE, D('4'))
+    s = reducer(s, EXP('square'))
+    s = reducer(s, EV()) // 16
+    s = reducer(s, EXP('square'))
+    expect(s.expression).toBe('16^2')
+  })
+
+  it('evaluates through an appended sqrt( prefix', () => {
+    let s = reducer(INITIAL_STATE, D('1'))
+    s = reducer(s, D('6'))
+    s = reducer(s, INV())
+    s = reducer(s, EXP('square')) // 16sqrt(
+    s = reducer(s, D('9'))
+    s = reducer(s, PAREN(')'))
+    s = reducer(s, EV())
+    expect(s.expression).toBe('48') // 16 * sqrt(9)
   })
 
   it('appends ^(1/ for inverse XY', () => {
@@ -758,10 +816,11 @@ describe('EXPONENTIAL', () => {
   })
 
   it('evaluates sqrt(16) = 4', () => {
-    let s = reducer(INITIAL_STATE, D('1'))
+    let s = reducer(INITIAL_STATE, INV())
+    s = reducer(s, EXP('square')) // sqrt(
+    s = reducer(s, D('1'))
     s = reducer(s, D('6'))
-    s = reducer(s, INV())
-    s = reducer(s, EXP('square'))
+    s = reducer(s, PAREN(')'))
     s = reducer(s, EV())
     expect(s.expression).toBe('4')
   })
@@ -771,46 +830,54 @@ describe('EXPONENTIAL', () => {
 /*  LOG_OPERATION                                                     */
 /* ------------------------------------------------------------------ */
 describe('LOG_OPERATION', () => {
-  it('wraps in log()', () => {
-    let s = reducer(INITIAL_STATE, D('1'))
+  it('evaluate log()', () => {
+    let s = reducer(INITIAL_STATE, LOG('log'))
+    s = reducer(s, D('1'))
     s = reducer(s, D('0'))
     s = reducer(s, D('0'))
-    s = reducer(s, LOG('log'))
+    s = reducer(s, PAREN(')'))
     expect(s.expression).toBe('log(100)')
   })
 
-  it('wraps in ln()', () => {
-    let s = reducer(INITIAL_STATE, D('1'))
-    s = reducer(s, LOG('ln'))
+  it('evaluate ln()', () => {
+    let s = reducer(INITIAL_STATE, LOG('ln'))
+    s = reducer(s, D('1'))
+    s = reducer(s, PAREN(')'))
     expect(s.expression).toBe('ln(1)')
   })
 
-  it('wraps in 10^() in inverse mode', () => {
+  it('log in inverse mode', () => {
     let s = reducer(INITIAL_STATE, D('2'))
+    s = reducer(s, OP('+'))
     s = reducer(s, INV())
     s = reducer(s, LOG('log'))
-    expect(s.expression).toBe('10^(2)')
+    s = reducer(s, D('2'))
+    s = reducer(s, PAREN(')'))
+    expect(s.expression).toBe('2 +  10^2')
   })
 
-  it('wraps in e^() in inverse mode', () => {
-    let s = reducer(INITIAL_STATE, D('1'))
-    s = reducer(s, INV())
+  it('ln in inverse mode', () => {
+    let s = reducer(INITIAL_STATE, INV())
     s = reducer(s, LOG('ln'))
-    expect(s.expression).toBe('e^(1)')
+    s = reducer(s, D('1'))
+    s = reducer(s, PAREN(')'))
+    expect(s.expression).toBe('e^1')
   })
 
   it('evaluates log(100) = 2', () => {
-    let s = reducer(INITIAL_STATE, D('1'))
+    let s = reducer(INITIAL_STATE, LOG('log'))
+    s = reducer(s, D('1'))
     s = reducer(s, D('0'))
     s = reducer(s, D('0'))
-    s = reducer(s, LOG('log'))
+    s = reducer(s, PAREN(')'))
     s = reducer(s, EV())
     expect(s.expression).toBe('2')
   })
 
   it('evaluates ln(1) = 0', () => {
-    let s = reducer(INITIAL_STATE, D('1'))
-    s = reducer(s, LOG('ln'))
+    let s = reducer(INITIAL_STATE, LOG('ln'))
+    s = reducer(s, D('1'))
+    s = reducer(s, PAREN(')'))
     s = reducer(s, EV())
     expect(s.expression).toBe('0')
   })
@@ -1103,13 +1170,15 @@ describe('End-to-end', () => {
 
   it('computes log(100) + ln(e) = 3', () => {
     // log(100) = 2, ln(e) = 1
-    let s = reducer(INITIAL_STATE, D('1'))
+    let s = reducer(INITIAL_STATE, LOG('log')) // log(
+    s = reducer(s, D('1'))
     s = reducer(s, D('0'))
     s = reducer(s, D('0'))
-    s = reducer(s, LOG('log'))
+    s = reducer(s, PAREN(')')) // log(100)
     s = reducer(s, OP('+'))
+    s = reducer(s, LOG('ln')) // + ln(
     s = reducer(s, CONST('e'))
-    s = reducer(s, LOG('ln'))
+    s = reducer(s, PAREN(')')) // + ln(e)
     s = reducer(s, EV())
     expect(parseFloat(s.expression)).toBeCloseTo(3, 4)
   })
